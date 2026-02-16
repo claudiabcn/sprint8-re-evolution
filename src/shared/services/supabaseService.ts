@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
+
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
@@ -32,6 +33,7 @@ export const getServices = async (): Promise<Service[]> => {
   return data || [];
 };
 
+
 export const getServiceById = async (id: string): Promise<Service | null> => {
   const { data, error } = await supabase
     .from('services')
@@ -62,6 +64,7 @@ export const createService = async (service: Service): Promise<Service> => {
   return data;
 };
 
+
 export const updateService = async (id: string, service: Partial<Service>): Promise<Service> => {
   const { data, error } = await supabase
     .from('services')
@@ -78,6 +81,7 @@ export const updateService = async (id: string, service: Partial<Service>): Prom
   return data;
 };
 
+
 export const deleteService = async (id: string): Promise<void> => {
   const { error } = await supabase
     .from('services')
@@ -90,6 +94,7 @@ export const deleteService = async (id: string): Promise<void> => {
   }
 };
 
+
 export const getStatistics = async () => {
   const { data: services, error } = await supabase
     .from('services')
@@ -100,11 +105,13 @@ export const getStatistics = async () => {
     throw error;
   }
 
+
   const byType = services.reduce((acc: any, service) => {
     const type = service.tipo_servicio;
     acc[type] = (acc[type] || 0) + 1;
     return acc;
   }, {});
+
 
   const byState = services
     .filter(s => s.estado_final)

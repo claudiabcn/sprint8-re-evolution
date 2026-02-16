@@ -7,9 +7,7 @@ const Navbar = () => {
 
   const navLinks = [
     { path: '/', label: 'Inicio', icon: '🏠' },
-    { path: '/calendar', label: 'Calendario', icon: '📅' },
-    { path: '/maps', label: 'Mapa', icon: '🗺️' },
-    { path: '/chart', label: 'Progreso', icon: '📊' },
+    { path: '/records', label: 'Registros', icon: '📋' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
