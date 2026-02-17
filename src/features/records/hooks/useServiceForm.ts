@@ -5,24 +5,22 @@ import { ENTITIES, ENTITY_LOCATIONS } from '../../../shared/constants/constants'
 interface UseServiceFormProps {
   service: Service | null;
   onClose: () => void;
+  initialDate?: string | null;
 }
 
-export function useServiceForm({ service, onClose }: UseServiceFormProps) {
+export function useServiceForm({ service, onClose, initialDate }: UseServiceFormProps) {
   const [formData, setFormData] = useState<Partial<Service>>({
-    fecha:         '',
+    fecha: initialDate || '',
     tipo_servicio: '',
-    entidad:       '',
-    tipo:          '',
-    duracion:      '',
-    ubicacion:     '',
-    lat:           undefined,
-    lng:           undefined,
-    estado_final:  '',
-    notas:         ''
+    entidad: '',
+    duracion: '',
+    ubicacion: '',
+    estado_final: '',
+    notas: ''
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
@@ -31,36 +29,33 @@ export function useServiceForm({ service, onClose }: UseServiceFormProps) {
         ...service,
         fecha: service.fecha.split('T')[0]
       });
+    } else if (initialDate) {
+      setFormData(prev => ({ ...prev, fecha: initialDate }));
     }
-  }, [service]);
+  }, [service, initialDate]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     setError(null);
-
     const { name, value } = e.target;
 
     if (name === 'tipo_servicio') {
       setFormData(prev => ({
         ...prev,
         tipo_servicio: value,
-        entidad:       '',
-        ubicacion:     '',
-        lat:           undefined,
-        lng:           undefined
+        entidad: '',
+        ubicacion: ''
       }));
       return;
     }
 
     if (name === 'entidad') {
-      const location = ENTITY_LOCATIONS[value];
+      const location = ENTITY_LOCATIONS[value as keyof typeof ENTITY_LOCATIONS];
       setFormData(prev => ({
         ...prev,
-        entidad:   value,
-        ubicacion: location?.address || '',
-        lat:       location?.lat,
-        lng:       location?.lng
+        entidad: value,
+        ubicacion: location?.address || ''
       }));
       return;
     }
@@ -69,7 +64,6 @@ export function useServiceForm({ service, onClose }: UseServiceFormProps) {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    
     e.preventDefault();
     setError(null);
     setSuccess(null);
@@ -77,7 +71,7 @@ export function useServiceForm({ service, onClose }: UseServiceFormProps) {
     try {
       setLoading(true);
       if (service?.id) {
-        await updateService(service.id, formData);
+        await updateService(service.id, formData as Service);
         setSuccess('Servicio actualizado correctamente');
       } else {
         await createService(formData as Service);
@@ -85,15 +79,14 @@ export function useServiceForm({ service, onClose }: UseServiceFormProps) {
       }
       setTimeout(() => onClose(), 800);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Error al guardar el servicio';
-      setError(message);
+      setError(err instanceof Error ? err.message : 'Error al guardar el servicio');
     } finally {
       setLoading(false);
     }
   };
 
   const availableEntities = formData.tipo_servicio
-    ? ENTITIES[formData.tipo_servicio as keyof typeof ENTITIES]
+    ? ENTITIES[formData.tipo_servicio as keyof typeof ENTITIES] || []
     : [];
 
   return {

@@ -1,15 +1,25 @@
-import { Service } from '../../shared/services/supabaseService';
+
 import { SERVICE_TYPES, DURATIONS, FINAL_STATES } from '../../shared/constants/constants';
 import { useServiceForm } from '../records/hooks/useServiceForm';
 import Button from '../../shared/components/Button';
+import { Service } from '../../shared/services/supabaseService';
 
 interface Props {
   service: Service | null;
   onClose: () => void;
+  initialDate?: string | null;
 }
 
-export default function ServiceForm({ service, onClose }: Props) {
-  const { formData, loading, error, success, availableEntities, handleChange, handleSubmit } = useServiceForm({ service, onClose });
+export default function ServiceForm({ service, onClose, initialDate }: Props) {
+  const { 
+    formData, 
+    loading, 
+    error, 
+    success, 
+    availableEntities, 
+    handleChange, 
+    handleSubmit 
+  } = useServiceForm({ service, onClose, initialDate });
 
   return (
     <div className="p-6">
@@ -31,11 +41,11 @@ export default function ServiceForm({ service, onClose }: Props) {
         </div>
 
         <div>
-          <label className="block text-sm font-bold text-rose-800 mb-2">🏥 Tipo de Servicio <span className="text-red-500">*</span></label>
+          <label className="block text-sm font-bold text-rose-800 mb-2">🏥 Tipo <span className="text-red-500">*</span></label>
           <select name="tipo_servicio" value={formData.tipo_servicio} onChange={handleChange} required
             className="w-full px-4 py-3 border-2 border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all bg-white">
             <option value="">Selecciona un tipo</option>
-            {SERVICE_TYPES.map(type => <option key={type} value={type}>{type}</option>)}
+            {SERVICE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
 
@@ -43,15 +53,15 @@ export default function ServiceForm({ service, onClose }: Props) {
           <label className="block text-sm font-bold text-rose-800 mb-2">🏢 Entidad <span className="text-red-500">*</span></label>
           <select name="entidad" value={formData.entidad} onChange={handleChange} required disabled={!formData.tipo_servicio}
             className="w-full px-4 py-3 border-2 border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all bg-white disabled:bg-pink-50 disabled:text-gray-400">
-            <option value="">Selecciona una entidad</option>
-            {availableEntities.map(entity => <option key={entity} value={entity}>{entity}</option>)}
+            <option value="">Selecciona entidad</option>
+            {availableEntities.map(e => <option key={e} value={e}>{e}</option>)}
           </select>
         </div>
 
         {formData.ubicacion && (
           <div>
             <label className="block text-sm font-bold text-rose-800 mb-2">📍 Ubicación</label>
-            <div className="w-full px-4 py-3 border-2 border-pink-100 rounded-lg bg-pink-50 text-rose-700 text-sm">{formData.ubicacion}</div>
+            <div className="w-full px-4 py-3 border-2 border-pink-100 rounded-lg bg-pink-50 text-rose-700 text-sm italic">{formData.ubicacion}</div>
           </div>
         )}
 
@@ -60,7 +70,7 @@ export default function ServiceForm({ service, onClose }: Props) {
           <select name="duracion" value={formData.duracion} onChange={handleChange}
             className="w-full px-4 py-3 border-2 border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all bg-white">
             <option value="">Selecciona duración</option>
-            {DURATIONS.map(duration => <option key={duration} value={duration}>{duration}</option>)}
+            {DURATIONS.map(d => <option key={d} value={d}>{d}</option>)}
           </select>
         </div>
 
@@ -69,7 +79,7 @@ export default function ServiceForm({ service, onClose }: Props) {
           <select name="estado_final" value={formData.estado_final} onChange={handleChange}
             className="w-full px-4 py-3 border-2 border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all bg-white">
             <option value="">Selecciona estado</option>
-            {FINAL_STATES.map(state => <option key={state} value={state}>{state}</option>)}
+            {FINAL_STATES.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
 
@@ -77,20 +87,11 @@ export default function ServiceForm({ service, onClose }: Props) {
           <label className="block text-sm font-bold text-rose-800 mb-2">📝 Notas</label>
           <textarea name="notas" value={formData.notas} onChange={handleChange} rows={3}
             className="w-full px-4 py-3 border-2 border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all bg-white resize-none"
-            placeholder="Notas adicionales (opcional)" />
+            placeholder="Notas opcionales" />
         </div>
 
-        {error && (
-          <div className="flex items-center gap-2 bg-red-50 border-2 border-red-200 text-red-700 text-sm font-medium px-4 py-3 rounded-lg">
-            <span>⚠️</span><span>{error}</span>
-          </div>
-        )}
-
-        {success && (
-          <div className="flex items-center gap-2 bg-green-50 border-2 border-green-200 text-green-700 text-sm font-medium px-4 py-3 rounded-lg">
-            <span>✅</span><span>{success}</span>
-          </div>
-        )}
+        {error && <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">⚠️ {error}</div>}
+        {success && <div className="p-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm">✅ {success}</div>}
 
         <div className="flex gap-3 pt-4">
           <Button type="submit" loading={loading} className="flex-1">
