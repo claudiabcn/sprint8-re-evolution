@@ -1,12 +1,46 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getServices, deleteService, Service } from '../../shared/services/supabaseService';
 import { SERVICE_COLORS } from '../../shared/constants/constants';
 import ServiceForm from './ServiceForm';
 
+function NotesPopover({ notes }: { notes: string }) {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setVisible(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative inline-block">
+      <button
+        onClick={() => setVisible(!visible)}
+        className="transition-transform hover:scale-110"
+        title="Ver observaciones"
+      >
+        📝
+      </button>
+
+      {visible && (
+        <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-white border-2 border-pink-200 rounded-xl shadow-xl p-3">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-pink-200"></div>
+          <p className="text-sm text-rose-600 leading-relaxed">{notes}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Records() {
-  const [services, setServices]         = useState<Service[]>([]);
-  const [loading, setLoading]           = useState(true);
-  const [showForm, setShowForm]         = useState(false);
+  const [services, setServices]           = useState<Service[]>([]);
+  const [loading, setLoading]             = useState(true);
+  const [showForm, setShowForm]           = useState(false);
   const [serviceToEdit, setServiceToEdit] = useState<Service | null>(null);
 
   useEffect(() => {
@@ -27,7 +61,7 @@ export default function Records() {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('¿Estás seguro de eliminar este registro?')) {
+    if (window.confirm('¿Estás segura de eliminar este registro?')) {
       try {
         await deleteService(id);
         loadServices();
@@ -98,7 +132,6 @@ export default function Records() {
           </div>
         )}
 
-
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-pink-400/20 via-amber-400/20 to-rose-400/20 rounded-2xl blur-xl transform scale-105"></div>
 
@@ -109,7 +142,7 @@ export default function Records() {
               <table className="min-w-full divide-y divide-pink-100">
                 <thead className="bg-gradient-to-r from-pink-50 to-rose-50">
                   <tr>
-                    {['Fecha', 'Servicio', 'Entidad', 'Duración', 'Ubicación', 'Estado', 'Acciones'].map(header => (
+                    {['Fecha', 'Servicio', 'Entidad', 'Duración', 'Estado', 'Acciones'].map(header => (
                       <th key={header} className="px-6 py-4 text-left text-xs font-bold text-rose-700 uppercase tracking-wider">
                         {header}
                       </th>
@@ -119,7 +152,7 @@ export default function Records() {
                 <tbody className="bg-white/60 divide-y divide-pink-100">
                   {services.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-12 text-center">
+                      <td colSpan={6} className="px-6 py-12 text-center">
                         <div className="flex flex-col items-center gap-3">
                           <span className="text-5xl">📋</span>
                           <p className="text-rose-600 font-medium">No hay registros todavía</p>
@@ -130,9 +163,11 @@ export default function Records() {
                   ) : (
                     services.map((service) => (
                       <tr key={service.id} className="hover:bg-pink-50/50 transition-colors">
+
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-rose-900">
                           {formatDate(service.fecha)}
                         </td>
+
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className="px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm"
@@ -141,40 +176,50 @@ export default function Records() {
                             {service.tipo_servicio}
                           </span>
                         </td>
+
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-rose-800 font-medium">
                           {service.entidad}
                         </td>
+
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-rose-700">
                           {service.duracion || '-'}
                         </td>
-                        <td className="px-6 py-4 text-sm text-rose-700 max-w-[200px] truncate">
-                          {service.ubicacion || '-'}
-                        </td>
+
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
-                            service.estado_final === 'Bien'         ? 'bg-green-100 text-green-800'  :
-                            service.estado_final === 'Muy mareada'  ? 'bg-red-100 text-red-800'      :
-                            service.estado_final === 'Algo mareada' ? 'bg-yellow-100 text-yellow-800':
-                            service.estado_final === 'Cansada'      ? 'bg-orange-100 text-orange-800':
+                            service.estado_final === 'Bien'         ? 'bg-green-100 text-green-800'   :
+                            service.estado_final === 'Muy mareada'  ? 'bg-red-100 text-red-800'       :
+                            service.estado_final === 'Algo mareada' ? 'bg-yellow-100 text-yellow-800' :
+                            service.estado_final === 'Cansada'      ? 'bg-orange-100 text-orange-800' :
                             'bg-gray-100 text-gray-800'
                           }`}>
                             {service.estado_final || '-'}
                           </span>
                         </td>
+
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <button
-                            onClick={() => handleEdit(service)}
-                            className="text-pink-600 hover:text-pink-800 font-semibold mr-4 transition-colors"
-                          >
-                            ✏️ Editar
-                          </button>
-                          <button
-                            onClick={() => handleDelete(service.id!)}
-                            className="text-red-600 hover:text-red-800 font-semibold transition-colors"
-                          >
-                            🗑️ Eliminar
-                          </button>
+                          <div className="flex items-center gap-3">
+                                       {service.notas && (
+                              <NotesPopover notes={service.notas} />
+                            )}
+                            <button
+                              onClick={() => handleEdit(service)}
+                              title="Editar registro"
+                              className="transition-transform hover:scale-110"
+                            >
+                              ✏️
+                            </button>
+                 
+                            <button
+                              onClick={() => handleDelete(service.id!)}
+                              title="Eliminar registro"
+                              className="transition-transform hover:scale-110"
+                            >
+                              🗑️
+                            </button>
+                          </div>
                         </td>
+
                       </tr>
                     ))
                   )}
