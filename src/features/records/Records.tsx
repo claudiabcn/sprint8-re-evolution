@@ -1,41 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { getServices, deleteService, Service } from '../../shared/services/supabaseService';
 import { SERVICE_COLORS } from '../../shared/constants/constants';
+import { formatDate } from '../../shared/utils/dateUtils';
+import NotesPopover from '../records/components/NotesPopover';
 import ServiceForm from './ServiceForm';
-
-function NotesPopover({ notes }: { notes: string }) {
-  const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setVisible(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  return (
-    <div ref={ref} className="relative inline-block">
-      <button
-        onClick={() => setVisible(!visible)}
-        className="transition-transform hover:scale-110"
-        title="Ver observaciones"
-      >
-        📝
-      </button>
-
-      {visible && (
-        <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-white border-2 border-pink-200 rounded-xl shadow-xl p-3">
-          <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-pink-200"></div>
-          <p className="text-sm text-rose-600 leading-relaxed">{notes}</p>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export default function Records() {
   const [services, setServices]           = useState<Service[]>([]);
@@ -86,14 +54,6 @@ export default function Records() {
     setShowForm(false);
     setServiceToEdit(null);
     loadServices();
-  };
-
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('es-ES', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
   };
 
   if (loading) {
@@ -199,7 +159,7 @@ export default function Records() {
 
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex items-center gap-3">
-                                       {service.notas && (
+                            {service.notas && (
                               <NotesPopover notes={service.notas} />
                             )}
                             <button
@@ -209,7 +169,6 @@ export default function Records() {
                             >
                               ✏️
                             </button>
-                 
                             <button
                               onClick={() => handleDelete(service.id!)}
                               title="Eliminar registro"

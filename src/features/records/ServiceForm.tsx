@@ -1,12 +1,6 @@
-import { useState, useEffect } from 'react';
-import { createService, updateService, Service } from '../../shared/services/supabaseService';
-import {
-  SERVICE_TYPES,
-  ENTITIES,
-  DURATIONS,
-  FINAL_STATES,
-  ENTITY_LOCATIONS
-} from '../../shared/constants/constants';
+import { Service } from '../../shared/services/supabaseService';
+import { SERVICE_TYPES, DURATIONS, FINAL_STATES } from '../../shared/constants/constants';
+import { useServiceForm } from '../records/hooks/useServiceForm';
 
 interface Props {
   service: Service | null;
@@ -14,80 +8,13 @@ interface Props {
 }
 
 export default function ServiceForm({ service, onClose }: Props) {
-  const [formData, setFormData] = useState<Partial<Service>>({
-    fecha:         '',
-    tipo_servicio: '',
-    entidad:       '',
-    tipo:          '',
-    duracion:      '',
-    ubicacion:     '',
-    lat:           undefined,
-    lng:           undefined,
-    estado_final:  '',
-    notas:         ''
-  });
-
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (service) {
-      setFormData({
-        ...service,
-        fecha: service.fecha.split('T')[0]
-      });
-    }
-  }, [service]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-
-    if (name === 'tipo_servicio') {
-      setFormData({ ...formData, tipo_servicio: value, entidad: '', ubicacion: '', lat: undefined, lng: undefined });
-
-    } else if (name === 'entidad') {
-      const location = ENTITY_LOCATIONS[value];
-      setFormData({
-        ...formData,
-        entidad:   value,
-        ubicacion: location?.address || '',
-        lat:       location?.lat,
-        lng:       location?.lng
-      });
-
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!formData.fecha || !formData.tipo_servicio || !formData.entidad) {
-      alert('Por favor completa los campos obligatorios: Fecha, Tipo de Servicio y Entidad');
-      return;
-    }
-
-    try {
-      setLoading(true);
-      if (service?.id) {
-        await updateService(service.id, formData);
-        alert('Servicio actualizado correctamente');
-      } else {
-        await createService(formData as Service);
-        alert('Servicio creado correctamente');
-      }
-      onClose();
-    } catch (error) {
-      console.error('Error saving service:', error);
-      alert('Error al guardar el servicio');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const availableEntities = formData.tipo_servicio
-    ? ENTITIES[formData.tipo_servicio as keyof typeof ENTITIES]
-    : [];
+  const {
+    formData,
+    loading,
+    availableEntities,
+    handleChange,
+    handleSubmit
+  } = useServiceForm({ service, onClose });
 
   return (
     <div className="p-6">
@@ -97,7 +24,10 @@ export default function ServiceForm({ service, onClose }: Props) {
           <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-rose-500 to-amber-600">
             {service ? 'Editar Registro' : 'Nuevo Registro'}
           </h2>
-          <button onClick={onClose} className="text-rose-400 hover:text-rose-600 text-3xl font-bold transition-colors">
+          <button
+            onClick={onClose}
+            className="text-rose-400 hover:text-rose-600 text-3xl font-bold transition-colors"
+          >
             ×
           </button>
         </div>
@@ -215,7 +145,6 @@ export default function ServiceForm({ service, onClose }: Props) {
             placeholder="Notas adicionales (opcional)"
           />
         </div>
-
 
         <div className="flex gap-3 pt-4">
           <button
