@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { getServices, deleteService, Service } from '../../shared/services/supabaseService';
 import { SERVICE_COLORS } from '../../shared/constants/constants';
-import { formatDate } from '../../shared//utils/dateUtils';
+import { formatDate } from '../../shared/utils/dateUtils';
 import NotesPopover from '../records/components/NotesPopover';
 import ConfirmDialog from '../../shared/components/ConfirmDialog';
 import ServiceForm from './ServiceForm';
+import Button from '../../shared/components/Button';
 
 export default function Records() {
   const [services, setServices]           = useState<Service[]>([]);
@@ -14,9 +15,7 @@ export default function Records() {
   const [serviceToEdit, setServiceToEdit] = useState<Service | null>(null);
   const [confirmId, setConfirmId]         = useState<string | null>(null);
 
-  useEffect(() => {
-    loadServices();
-  }, []);
+  useEffect(() => { loadServices(); }, []);
 
   const loadServices = async () => {
     try {
@@ -25,8 +24,7 @@ export default function Records() {
       const data = await getServices();
       setServices(data);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Error al cargar los registros';
-      setError(message);
+      setError(err instanceof Error ? err.message : 'Error al cargar los registros');
     } finally {
       setLoading(false);
     }
@@ -39,27 +37,14 @@ export default function Records() {
       setConfirmId(null);
       loadServices();
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Error al eliminar el registro';
-      setError(message);
+      setError(err instanceof Error ? err.message : 'Error al eliminar el registro');
       setConfirmId(null);
     }
   };
 
-  const handleEdit = (service: Service) => {
-    setServiceToEdit(service);
-    setShowForm(true);
-  };
-
-  const handleNew = () => {
-    setServiceToEdit(null);
-    setShowForm(true);
-  };
-
-  const handleCloseForm = () => {
-    setShowForm(false);
-    setServiceToEdit(null);
-    loadServices();
-  };
+  const handleEdit = (service: Service) => { setServiceToEdit(service); setShowForm(true); };
+  const handleNew  = () => { setServiceToEdit(null); setShowForm(true); };
+  const handleCloseForm = () => { setShowForm(false); setServiceToEdit(null); loadServices(); };
 
   if (loading) {
     return (
@@ -80,13 +65,7 @@ export default function Records() {
             </h1>
             <p className="text-rose-600 mt-1">Historial completo de tus servicios</p>
           </div>
-          <button
-            onClick={handleNew}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-          >
-            <span className="text-xl">+</span>
-            <span>Nuevo Registro</span>
-          </button>
+          <Button onClick={handleNew}>+ Nuevo Registro</Button>
         </div>
 
         {error && (
@@ -95,12 +74,7 @@ export default function Records() {
               <span>⚠️</span>
               <span>{error}</span>
             </div>
-            <button
-              onClick={() => setError(null)}
-              className="text-red-400 hover:text-red-600 font-bold text-lg leading-none"
-            >
-              ×
-            </button>
+            <button onClick={() => setError(null)} className="text-red-400 hover:text-red-600 font-bold text-lg leading-none">×</button>
           </div>
         )}
 
@@ -122,7 +96,6 @@ export default function Records() {
 
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-pink-400/20 via-amber-400/20 to-rose-400/20 rounded-2xl blur-xl transform scale-105"></div>
-
           <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-pink-200/50 overflow-hidden">
             <div className="h-1.5 bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500"></div>
 
@@ -151,28 +124,17 @@ export default function Records() {
                   ) : (
                     services.map((service) => (
                       <tr key={service.id} className="hover:bg-pink-50/50 transition-colors">
-
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-rose-900">
                           {formatDate(service.fecha)}
                         </td>
-
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span
-                            className="px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm"
-                            style={{ backgroundColor: SERVICE_COLORS[service.tipo_servicio as keyof typeof SERVICE_COLORS] }}
-                          >
+                          <span className="px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm"
+                            style={{ backgroundColor: SERVICE_COLORS[service.tipo_servicio as keyof typeof SERVICE_COLORS] }}>
                             {service.tipo_servicio}
                           </span>
                         </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-rose-800 font-medium">
-                          {service.entidad}
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-rose-700">
-                          {service.duracion || '-'}
-                        </td>
-
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-rose-800 font-medium">{service.entidad}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-rose-700">{service.duracion || '-'}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
                             service.estado_final === 'Bien'         ? 'bg-green-100 text-green-800'   :
@@ -184,29 +146,13 @@ export default function Records() {
                             {service.estado_final || '-'}
                           </span>
                         </td>
-
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex items-center gap-3">
-                            {service.notas && (
-                              <NotesPopover notes={service.notas} />
-                            )}
-                            <button
-                              onClick={() => handleEdit(service)}
-                              title="Editar registro"
-                              className="transition-transform hover:scale-110"
-                            >
-                              ✏️
-                            </button>
-                            <button
-                              onClick={() => setConfirmId(service.id!)}
-                              title="Eliminar registro"
-                              className="transition-transform hover:scale-110"
-                            >
-                              🗑️
-                            </button>
+                            {service.notas && <NotesPopover notes={service.notas} />}
+                            <button onClick={() => handleEdit(service)} title="Editar" className="transition-transform hover:scale-110">✏️</button>
+                            <button onClick={() => setConfirmId(service.id!)} title="Eliminar" className="transition-transform hover:scale-110">🗑️</button>
                           </div>
                         </td>
-
                       </tr>
                     ))
                   )}

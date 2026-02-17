@@ -50,10 +50,9 @@ export const FINAL_STATES = [
   'Bien'
 ];
 
-
 export const SERVICE_COLORS = {
-  'Rehabilitación vestibular': '#3B82F6', 
-  'Fisioterapia': '#10B981',              
-  'Cita médica': '#EF4444',               
-  'Actividad física': '#F59E0B'          
+  'Rehabilitación vestibular': '#c084fc',
+  'Fisioterapia':              '#fcd34d',
+  'Cita médica':               '#fb7185',
+  'Actividad física':          '#f9a8d4',
 };
