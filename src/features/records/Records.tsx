@@ -3,13 +3,16 @@ import { getServices, deleteService, Service } from '../../shared/services/supab
 import { SERVICE_COLORS } from '../../shared/constants/constants';
 import { formatDate } from '../../shared//utils/dateUtils';
 import NotesPopover from '../records/components/NotesPopover';
+import ConfirmDialog from '../../shared/components/ConfirmDialog';
 import ServiceForm from './ServiceForm';
 
 export default function Records() {
   const [services, setServices]           = useState<Service[]>([]);
   const [loading, setLoading]             = useState(true);
+  const [error, setError]                 = useState<string | null>(null);
   const [showForm, setShowForm]           = useState(false);
   const [serviceToEdit, setServiceToEdit] = useState<Service | null>(null);
+  const [confirmId, setConfirmId]         = useState<string | null>(null);
 
   useEffect(() => {
     loadServices();
@@ -18,25 +21,27 @@ export default function Records() {
   const loadServices = async () => {
     try {
       setLoading(true);
+      setError(null);
       const data = await getServices();
       setServices(data);
-    } catch (error) {
-      console.error('Error loading services:', error);
-      alert('Error al cargar los servicios');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Error al cargar los registros';
+      setError(message);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('¿Estás segura de eliminar este registro?')) {
-      try {
-        await deleteService(id);
-        loadServices();
-      } catch (error) {
-        console.error('Error deleting service:', error);
-        alert('Error al eliminar el servicio');
-      }
+    try {
+      setError(null);
+      await deleteService(id);
+      setConfirmId(null);
+      loadServices();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Error al eliminar el registro';
+      setError(message);
+      setConfirmId(null);
     }
   };
 
@@ -83,6 +88,29 @@ export default function Records() {
             <span>Nuevo Registro</span>
           </button>
         </div>
+
+        {error && (
+          <div className="flex items-center justify-between gap-2 bg-red-50 border-2 border-red-200 text-red-700 text-sm font-medium px-4 py-3 rounded-lg mb-6">
+            <div className="flex items-center gap-2">
+              <span>⚠️</span>
+              <span>{error}</span>
+            </div>
+            <button
+              onClick={() => setError(null)}
+              className="text-red-400 hover:text-red-600 font-bold text-lg leading-none"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        {confirmId && (
+          <ConfirmDialog
+            message="¿Estás segura de eliminar este registro?"
+            onConfirm={() => handleDelete(confirmId)}
+            onCancel={() => setConfirmId(null)}
+          />
+        )}
 
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -170,7 +198,7 @@ export default function Records() {
                               ✏️
                             </button>
                             <button
-                              onClick={() => handleDelete(service.id!)}
+                              onClick={() => setConfirmId(service.id!)}
                               title="Eliminar registro"
                               className="transition-transform hover:scale-110"
                             >
