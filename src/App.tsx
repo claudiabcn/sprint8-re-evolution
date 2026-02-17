@@ -1,7 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar  from '../src/shared/components/Navbar';
-import Home from './features/home/Home';
-import Records from './features/records/Records';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Navbar from './shared/components/Navbar';
+import AppRoutes from './routes/appRoutes';
 
 function App() {
   return (
@@ -9,10 +8,7 @@ function App() {
       <div className="min-h-screen bg-gradient-to-br from-pastel-yellow-50 via-white to-pastel-pink-50">
         <Navbar />
         <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/records" element={<Records />} />
-          </Routes>
+          <AppRoutes />
         </main>
       </div>
     </Router>
