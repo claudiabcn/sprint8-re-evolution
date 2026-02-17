@@ -1,23 +1,25 @@
 import { createClient } from '@supabase/supabase-js';
 
-
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export interface Service {
-  id?: string;
-  fecha: string;
+  id?:           string;
+  fecha:         string;
   tipo_servicio: string;
-  entidad: string;
-  tipo?: string;
-  duracion?: string;
-  ubicacion?: string;
+  entidad:       string;
+  tipo?:         string;
+  duracion?:     string;
+  ubicacion?:    string;  
+  lat?:          number;  
+  lng?:          number;  
   estado_final?: string;
-  notas?: string;
-  created_at?: string;
+  notas?:        string;
+  created_at?:   string;
 }
+
 
 export const getServices = async (): Promise<Service[]> => {
   const { data, error } = await supabase
@@ -32,7 +34,6 @@ export const getServices = async (): Promise<Service[]> => {
 
   return data || [];
 };
-
 
 export const getServiceById = async (id: string): Promise<Service | null> => {
   const { data, error } = await supabase
@@ -105,25 +106,21 @@ export const getStatistics = async () => {
     throw error;
   }
 
-
   const byType = services.reduce((acc: any, service) => {
-    const type = service.tipo_servicio;
-    acc[type] = (acc[type] || 0) + 1;
+    acc[service.tipo_servicio] = (acc[service.tipo_servicio] || 0) + 1;
     return acc;
   }, {});
-
 
   const byState = services
     .filter(s => s.estado_final)
     .reduce((acc: any, service) => {
-      const state = service.estado_final;
-      acc[state] = (acc[state] || 0) + 1;
+      acc[service.estado_final] = (acc[service.estado_final] || 0) + 1;
       return acc;
     }, {});
 
   return {
     total: services.length,
-    byType: Object.entries(byType).map(([key, value]) => ({ _id: key, count: value })),
-    byState: Object.entries(byState).map(([key, value]) => ({ _id: key, count: value }))
+    byType:  Object.entries(byType).map(([key, value])  => ({ label: key, count: value })),
+    byState: Object.entries(byState).map(([key, value]) => ({ label: key, count: value }))
   };
 };

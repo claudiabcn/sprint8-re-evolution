@@ -3,10 +3,9 @@ import { createService, updateService, Service } from '../../shared/services/sup
 import {
   SERVICE_TYPES,
   ENTITIES,
-  APPOINTMENT_TYPES,
   DURATIONS,
-  LOCATIONS,
-  FINAL_STATES
+  FINAL_STATES,
+  ENTITY_LOCATIONS
 } from '../../shared/constants/constants';
 
 interface Props {
@@ -16,14 +15,16 @@ interface Props {
 
 export default function ServiceForm({ service, onClose }: Props) {
   const [formData, setFormData] = useState<Partial<Service>>({
-    fecha: '',
+    fecha:         '',
     tipo_servicio: '',
-    entidad: '',
-    tipo: '',
-    duracion: '',
-    ubicacion: '',
-    estado_final: '',
-    notas: ''
+    entidad:       '',
+    tipo:          '',
+    duracion:      '',
+    ubicacion:     '',
+    lat:           undefined,
+    lng:           undefined,
+    estado_final:  '',
+    notas:         ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -39,24 +40,28 @@ export default function ServiceForm({ service, onClose }: Props) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    
+
     if (name === 'tipo_servicio') {
+      setFormData({ ...formData, tipo_servicio: value, entidad: '', ubicacion: '', lat: undefined, lng: undefined });
+
+    } else if (name === 'entidad') {
+      const location = ENTITY_LOCATIONS[value];
       setFormData({
         ...formData,
-        [name]: value,
-        entidad: ''
+        entidad:   value,
+        ubicacion: location?.address || '',
+        lat:       location?.lat,
+        lng:       location?.lng
       });
+
     } else {
-      setFormData({
-        ...formData,
-        [name]: value
-      });
+      setFormData({ ...formData, [name]: value });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.fecha || !formData.tipo_servicio || !formData.entidad) {
       alert('Por favor completa los campos obligatorios: Fecha, Tipo de Servicio y Entidad');
       return;
@@ -64,7 +69,6 @@ export default function ServiceForm({ service, onClose }: Props) {
 
     try {
       setLoading(true);
-      
       if (service?.id) {
         await updateService(service.id, formData);
         alert('Servicio actualizado correctamente');
@@ -72,7 +76,6 @@ export default function ServiceForm({ service, onClose }: Props) {
         await createService(formData as Service);
         alert('Servicio creado correctamente');
       }
-      
       onClose();
     } catch (error) {
       console.error('Error saving service:', error);
@@ -82,22 +85,19 @@ export default function ServiceForm({ service, onClose }: Props) {
     }
   };
 
-  const availableEntities = formData.tipo_servicio 
-    ? ENTITIES[formData.tipo_servicio as keyof typeof ENTITIES] 
+  const availableEntities = formData.tipo_servicio
+    ? ENTITIES[formData.tipo_servicio as keyof typeof ENTITIES]
     : [];
 
   return (
     <div className="p-6">
-      {/* Header */}
+
       <div className="mb-6">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-rose-500 to-amber-600">
             {service ? 'Editar Registro' : 'Nuevo Registro'}
           </h2>
-          <button
-            onClick={onClose}
-            className="text-rose-400 hover:text-rose-600 text-3xl font-bold transition-colors"
-          >
+          <button onClick={onClose} className="text-rose-400 hover:text-rose-600 text-3xl font-bold transition-colors">
             ×
           </button>
         </div>
@@ -105,7 +105,7 @@ export default function ServiceForm({ service, onClose }: Props) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Date */}
+
         <div>
           <label className="block text-sm font-bold text-rose-800 mb-2">
             📅 Fecha <span className="text-red-500">*</span>
@@ -120,7 +120,6 @@ export default function ServiceForm({ service, onClose }: Props) {
           />
         </div>
 
-        {/* Service Type */}
         <div>
           <label className="block text-sm font-bold text-rose-800 mb-2">
             🏥 Tipo de Servicio <span className="text-red-500">*</span>
@@ -139,7 +138,6 @@ export default function ServiceForm({ service, onClose }: Props) {
           </select>
         </div>
 
-        {/* Entity */}
         <div>
           <label className="block text-sm font-bold text-rose-800 mb-2">
             🏢 Entidad <span className="text-red-500">*</span>
@@ -159,27 +157,17 @@ export default function ServiceForm({ service, onClose }: Props) {
           </select>
         </div>
 
-        {/* Appointment Type (for medical appointments) */}
-        {formData.tipo_servicio === 'Cita médica' && (
+        {formData.ubicacion && (
           <div>
             <label className="block text-sm font-bold text-rose-800 mb-2">
-              📋 Tipo de Cita
+              📍 Ubicación
             </label>
-            <select
-              name="tipo"
-              value={formData.tipo}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border-2 border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all bg-white"
-            >
-              <option value="">Selecciona un tipo</option>
-              {APPOINTMENT_TYPES.map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
+            <div className="w-full px-4 py-3 border-2 border-pink-100 rounded-lg bg-pink-50 text-rose-700 text-sm">
+              {formData.ubicacion}
+            </div>
           </div>
         )}
 
-        {/* Duration */}
         <div>
           <label className="block text-sm font-bold text-rose-800 mb-2">
             ⏱️ Duración
@@ -197,25 +185,6 @@ export default function ServiceForm({ service, onClose }: Props) {
           </select>
         </div>
 
-        {/* Location */}
-        <div>
-          <label className="block text-sm font-bold text-rose-800 mb-2">
-            📍 Ubicación
-          </label>
-          <select
-            name="ubicacion"
-            value={formData.ubicacion}
-            onChange={handleChange}
-            className="w-full px-4 py-3 border-2 border-pink-200 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all bg-white"
-          >
-            <option value="">Selecciona ubicación</option>
-            {LOCATIONS.map(location => (
-              <option key={location} value={location}>{location}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Final State */}
         <div>
           <label className="block text-sm font-bold text-rose-800 mb-2">
             💫 Estado Final
@@ -233,7 +202,6 @@ export default function ServiceForm({ service, onClose }: Props) {
           </select>
         </div>
 
-        {/* Notes */}
         <div>
           <label className="block text-sm font-bold text-rose-800 mb-2">
             📝 Notas
@@ -248,7 +216,7 @@ export default function ServiceForm({ service, onClose }: Props) {
           />
         </div>
 
-        {/* Buttons */}
+
         <div className="flex gap-3 pt-4">
           <button
             type="submit"
@@ -265,6 +233,7 @@ export default function ServiceForm({ service, onClose }: Props) {
             ❌ Cancelar
           </button>
         </div>
+
       </form>
     </div>
   );
