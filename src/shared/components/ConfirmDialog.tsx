@@ -1,3 +1,5 @@
+import Button from './Button';
+
 interface Props {
   message:   string;
   onConfirm: () => void;
@@ -6,28 +8,33 @@ interface Props {
 
 export default function ConfirmDialog({ message, onConfirm, onCancel }: Props) {
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-pink-200/50 p-6 max-w-sm w-full">
-        <div className="h-1 bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 rounded-full mb-5"></div>
+    <div className="fixed inset-0 bg-rose-900/20 backdrop-blur-sm flex items-center justify-center z-[100] p-4 animate-in fade-in duration-300">
+      <div className="bg-white rounded-3xl shadow-2xl border border-pink-100 p-6 max-w-sm w-full transform animate-in zoom-in-95 duration-200">
+        <div className="h-1.5 bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 rounded-full mb-6"></div>
 
-        <div className="text-center mb-6">
-          <span className="text-5xl block mb-3">🗑️</span>
-          <p className="text-rose-800 font-semibold">{message}</p>
+        <div className="text-center mb-8">
+          <div className="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-4xl">🗑️</span>
+          </div>
+          <p className="text-rose-900 font-bold text-lg leading-tight px-2">{message}</p>
+          <p className="text-rose-500 text-sm mt-2 font-medium">Esta acción no se puede deshacer</p>
         </div>
 
-        <div className="flex gap-3">
-          <button
+        <div className="flex flex-col gap-3">
+          <Button 
+            variant="danger" 
             onClick={onConfirm}
-            className="flex-1 bg-gradient-to-r from-red-400 to-rose-500 text-white py-2.5 rounded-full font-bold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
+            className="w-full py-3"
           >
-            Eliminar
-          </button>
-          <button
+            Confirmar eliminación
+          </Button>
+          <Button 
+            variant="secondary" 
             onClick={onCancel}
-            className="flex-1 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 py-2.5 rounded-full font-bold hover:from-gray-200 hover:to-gray-300 transition-all duration-300"
+            className="w-full py-3"
           >
-            Cancelar
-          </button>
+            No, volver atrás
+          </Button>
         </div>
       </div>
     </div>

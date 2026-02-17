@@ -22,16 +22,14 @@ export default function NotesPopover({ notes }: Props) {
     <div ref={ref} className="relative inline-block">
       <button
         onClick={() => setVisible(!visible)}
-        className="transition-transform hover:scale-110"
-        title="Ver observaciones"
       >
         📝
       </button>
 
       {visible && (
-        <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-white border-2 border-pink-200 rounded-xl shadow-xl p-3">
-          <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-pink-200"></div>
-          <p className="text-sm text-rose-600 leading-relaxed">{notes}</p>
+        <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 bg-white/95 backdrop-blur-sm border-2 border-pink-100 rounded-2xl shadow-2xl p-4 animate-in fade-in zoom-in duration-200">
+          <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-pink-100"></div>
+          <p className="text-sm text-rose-800 leading-relaxed italic">"{notes}"</p>
         </div>
       )}
     </div>

@@ -12,62 +12,60 @@ const Navbar = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-gradient-to-r from-rose-50 via-amber-50 to-pink-50 shadow-lg border-b-2 border-pink-200">
+    <nav className="sticky top-0 z-[100] bg-white/70 backdrop-blur-md border-b border-pink-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-
+          
           <Link to="/" className="flex items-center gap-2 group">
-            <span className="text-3xl group-hover:scale-110 transition-transform">🏋️</span>
-            <span className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-rose-500 to-amber-600 tracking-tight">
+            <div className="w-10 h-10 bg-gradient-to-br from-pink-100 to-amber-100 rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+              <span className="text-2xl">🏋️</span>
+            </div>
+            <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-rose-500 to-amber-600 tracking-tighter">
               Re-Evolución
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                className={`relative flex items-center gap-2 px-5 py-2 rounded-full font-bold text-sm transition-all duration-300 ${
                   isActive(link.path)
-                    ? 'bg-pink-100 text-rose-800 shadow-md'
-                    : 'text-rose-700 hover:bg-pink-50 hover:text-rose-800'
+                    ? 'text-rose-600 bg-pink-50'
+                    : 'text-rose-400 hover:text-rose-600 hover:bg-rose-50/50'
                 }`}
               >
-                <span className="text-xl">{link.icon}</span>
+                <span>{link.icon}</span>
                 <span>{link.label}</span>
+                {isActive(link.path) && (
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-pink-500 to-amber-500 rounded-full" />
+                )}
               </Link>
             ))}
           </div>
 
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-rose-700 hover:bg-pink-100 transition-colors"
-            aria-label="Toggle menu"
+            className="md:hidden p-2 rounded-xl text-rose-500 hover:bg-pink-50 transition-colors"
           >
-            {isMenuOpen ? (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+            </svg>
           </button>
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden pb-4 space-y-2">
+          <div className="md:hidden pb-6 space-y-1 animate-in slide-in-from-top-4 duration-200">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsMenuOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
+                className={`flex items-center gap-4 px-4 py-4 rounded-2xl font-bold transition-all ${
                   isActive(link.path)
-                    ? 'bg-pink-100 text-rose-800 shadow-md'
-                    : 'text-rose-700 hover:bg-pink-50'
+                    ? 'bg-gradient-to-r from-pink-50 to-amber-50 text-rose-700 shadow-sm border border-pink-100'
+                    : 'text-rose-400 hover:bg-pink-50'
                 }`}
               >
                 <span className="text-2xl">{link.icon}</span>

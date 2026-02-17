@@ -13,7 +13,6 @@ export default function ServiceForm({ service, onClose }: Props) {
 
   return (
     <div className="p-6">
-
       <div className="mb-6">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-rose-500 to-amber-600">
@@ -25,7 +24,6 @@ export default function ServiceForm({ service, onClose }: Props) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-
         <div>
           <label className="block text-sm font-bold text-rose-800 mb-2">📅 Fecha <span className="text-red-500">*</span></label>
           <input type="date" name="fecha" value={formData.fecha} onChange={handleChange} required
@@ -102,7 +100,6 @@ export default function ServiceForm({ service, onClose }: Props) {
             ❌ Cancelar
           </Button>
         </div>
-
       </form>
     </div>
   );

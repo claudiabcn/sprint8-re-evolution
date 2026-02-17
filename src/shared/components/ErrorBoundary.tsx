@@ -1,4 +1,5 @@
 import { Component, ReactNode } from 'react';
+import Button from './Button';
 
 interface Props {
   children: ReactNode;
@@ -34,26 +35,32 @@ export default class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="min-h-screen bg-gradient-to-br from-rose-50 via-amber-50 to-pink-50 flex items-center justify-center p-6">
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-pink-200/50 p-8 max-w-md w-full text-center">
-            <div className="h-1.5 bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 rounded-full mb-6"></div>
+        <div className="min-h-[60vh] flex items-center justify-center p-6">
+          <div className="relative w-full max-w-md">
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-400/20 via-amber-400/20 to-rose-400/20 rounded-3xl blur-2xl transform scale-110"></div>
+            
+            <div className="relative bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl border border-pink-100 p-8 text-center">
+              <div className="h-1.5 bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 rounded-full mb-8"></div>
 
-            <span className="text-6xl mb-4 block">🌀</span>
+              <div className="w-24 h-24 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-5xl animate-pulse">🌀</span>
+              </div>
 
-            <h2 className="text-2xl font-black text-rose-800 mb-2">
-              Algo salió mal
-            </h2>
+              <h2 className="text-3xl font-black text-rose-900 mb-3 tracking-tight">
+                ¡Ups! Algo falló
+              </h2>
 
-            <p className="text-rose-500 text-sm mb-6">
-              {this.state.message}
-            </p>
+              <p className="text-rose-600 font-medium mb-8 bg-rose-50/50 py-3 px-4 rounded-xl border border-rose-100 italic">
+                {this.state.message}
+              </p>
 
-            <button
-              onClick={this.handleReset}
-              className="bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-            >
-              Reintentar
-            </button>
+              <Button 
+                onClick={this.handleReset}
+                className="w-full py-4 text-base"
+              >
+                🔄 Reintentar ahora
+              </Button>
+            </div>
           </div>
         </div>
       );
