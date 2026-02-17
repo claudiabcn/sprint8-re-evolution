@@ -11,6 +11,8 @@ export default function ServiceForm({ service, onClose }: Props) {
   const {
     formData,
     loading,
+    error,
+    success,
     availableEntities,
     handleChange,
     handleSubmit
@@ -145,6 +147,20 @@ export default function ServiceForm({ service, onClose }: Props) {
             placeholder="Notas adicionales (opcional)"
           />
         </div>
+
+        {error && (
+          <div className="flex items-center gap-2 bg-red-50 border-2 border-red-200 text-red-700 text-sm font-medium px-4 py-3 rounded-lg">
+            <span>⚠️</span>
+            <span>{error}</span>
+          </div>
+        )}
+
+        {success && (
+          <div className="flex items-center gap-2 bg-green-50 border-2 border-green-200 text-green-700 text-sm font-medium px-4 py-3 rounded-lg">
+            <span>✅</span>
+            <span>{success}</span>
+          </div>
+        )}
 
         <div className="flex gap-3 pt-4">
           <button

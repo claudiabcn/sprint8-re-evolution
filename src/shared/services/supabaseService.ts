@@ -12,9 +12,9 @@ export interface Service {
   entidad:       string;
   tipo?:         string;
   duracion?:     string;
-  ubicacion?:    string;  
-  lat?:          number;  
-  lng?:          number;  
+  ubicacion?:    string;
+  lat?:          number;
+  lng?:          number;
   estado_final?: string;
   notas?:        string;
   created_at?:   string;
@@ -27,10 +27,7 @@ export const getServices = async (): Promise<Service[]> => {
     .select('*')
     .order('fecha', { ascending: false });
 
-  if (error) {
-    console.error('Error fetching services:', error);
-    throw error;
-  }
+  if (error) throw error;
 
   return data || [];
 };
@@ -42,10 +39,7 @@ export const getServiceById = async (id: string): Promise<Service | null> => {
     .eq('id', id)
     .single();
 
-  if (error) {
-    console.error('Error fetching service:', error);
-    throw error;
-  }
+  if (error) throw error;
 
   return data;
 };
@@ -57,14 +51,10 @@ export const createService = async (service: Service): Promise<Service> => {
     .select()
     .single();
 
-  if (error) {
-    console.error('Error creating service:', error);
-    throw error;
-  }
+  if (error) throw error;
 
   return data;
 };
-
 
 export const updateService = async (id: string, service: Partial<Service>): Promise<Service> => {
   const { data, error } = await supabase
@@ -74,14 +64,10 @@ export const updateService = async (id: string, service: Partial<Service>): Prom
     .select()
     .single();
 
-  if (error) {
-    console.error('Error updating service:', error);
-    throw error;
-  }
+  if (error) throw error;
 
   return data;
 };
-
 
 export const deleteService = async (id: string): Promise<void> => {
   const { error } = await supabase
@@ -89,22 +75,15 @@ export const deleteService = async (id: string): Promise<void> => {
     .delete()
     .eq('id', id);
 
-  if (error) {
-    console.error('Error deleting service:', error);
-    throw error;
-  }
+  if (error) throw error;
 };
-
 
 export const getStatistics = async () => {
   const { data: services, error } = await supabase
     .from('services')
     .select('tipo_servicio, estado_final');
 
-  if (error) {
-    console.error('Error fetching statistics:', error);
-    throw error;
-  }
+  if (error) throw error;
 
   const byType = services.reduce((acc: any, service) => {
     acc[service.tipo_servicio] = (acc[service.tipo_servicio] || 0) + 1;

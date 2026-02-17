@@ -22,6 +22,8 @@ export function useServiceForm({ service, onClose }: UseServiceFormProps) {
   });
 
   const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     if (service) {
@@ -35,6 +37,8 @@ export function useServiceForm({ service, onClose }: UseServiceFormProps) {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
+    setError(null);
+
     const { name, value } = e.target;
 
     if (name === 'tipo_servicio') {
@@ -50,7 +54,6 @@ export function useServiceForm({ service, onClose }: UseServiceFormProps) {
     }
 
     if (name === 'entidad') {
-      // Selecting an entity auto-fills its known location data
       const location = ENTITY_LOCATIONS[value];
       setFormData(prev => ({
         ...prev,
@@ -66,26 +69,24 @@ export function useServiceForm({ service, onClose }: UseServiceFormProps) {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    
     e.preventDefault();
-
-    if (!formData.fecha || !formData.tipo_servicio || !formData.entidad) {
-      alert('Por favor completa los campos obligatorios: Fecha, Tipo de Servicio y Entidad');
-      return;
-    }
+    setError(null);
+    setSuccess(null);
 
     try {
       setLoading(true);
       if (service?.id) {
         await updateService(service.id, formData);
-        alert('Servicio actualizado correctamente');
+        setSuccess('Servicio actualizado correctamente');
       } else {
         await createService(formData as Service);
-        alert('Servicio creado correctamente');
+        setSuccess('Servicio creado correctamente');
       }
-      onClose();
-    } catch (error) {
-      console.error('Error saving service:', error);
-      alert('Error al guardar el servicio');
+      setTimeout(() => onClose(), 800);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Error al guardar el servicio';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -98,6 +99,8 @@ export function useServiceForm({ service, onClose }: UseServiceFormProps) {
   return {
     formData,
     loading,
+    error,
+    success,
     availableEntities,
     handleChange,
     handleSubmit
