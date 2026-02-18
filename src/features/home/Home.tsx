@@ -1,12 +1,20 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/context/AuthContext';
 import Layout from '../../shared/components/Layout';
 import ServiceForm from '../records/ServiceForm';
 
 const Home = () => {
+  const { session } = useAuth(); 
+  const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [selectedServiceType, setSelectedServiceType] = useState<string | null>(null);
 
   const handleCardClick = (serviceType: string) => {
+    if (!session) {
+      navigate('/login');
+      return;
+    }
     setSelectedServiceType(serviceType);
     setShowForm(true);
   };
@@ -25,12 +33,13 @@ const Home = () => {
 
   return (
     <Layout 
-          title="Tu Re-Evolución" 
+      title="Tu Re-Evolución" 
       subtitle="Rehabilita tu cuerpo, evoluciona tu movimiento."
     >
       <div className="mb-12 text-center md:text-left">
         <h2 className="text-4xl md:text-5xl font-black text-rose-900 mb-4 tracking-tight">
-          ¿Qué hacemos hoy?         </h2>
+          ¿Qué hacemos hoy?
+        </h2>
         <p className="text-rose-700/70 text-lg max-w-2xl mb-6">
           Registra tu actividad para visualizar tu progreso y sanar de forma consciente.
         </p>
@@ -63,6 +72,7 @@ const Home = () => {
           </button>
         ))}
       </div>
+
 
       <div className="mt-20 text-center">
         <div className="inline-flex items-center gap-3 p-2 pr-8 rounded-full bg-white shadow-sm border border-rose-100">
