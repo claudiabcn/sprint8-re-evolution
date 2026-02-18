@@ -1,7 +1,7 @@
 import { SERVICE_TYPES, DURATIONS, FINAL_STATES } from '../../shared/constants/constants';
 import { useServiceForm } from '../records/hooks/useServiceForm';
 import Button from '../../shared/components/Button';
-import { Service } from '../../shared/services/supabaseService';
+import type { Service } from '../../shared/types/types';
 
 interface Props {
   service: Service | null;

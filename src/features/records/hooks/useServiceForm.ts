@@ -1,13 +1,7 @@
 import { useState, useEffect } from 'react';
-import { createService, updateService, Service } from '../../../shared/services/supabaseService';
+import { createService, updateService } from '../../../shared/services/supabaseService';
 import { ENTITIES, ENTITY_LOCATIONS } from '../../../shared/constants/constants';
-
-interface UseServiceFormProps {
-  service: Service | null;
-  onClose: () => void;
-  initialDate?: string | null;
-  initialServiceType?: string | null; 
-}
+import type { Service, UseServiceFormProps } from '../../../shared/types/types';
 
 export function useServiceForm({ 
   service, 
@@ -36,7 +30,6 @@ export function useServiceForm({
         fecha: service.fecha.split('T')[0]
       });
     } else {
-
       setFormData(prev => ({ 
         ...prev, 
         fecha: initialDate || prev.fecha,

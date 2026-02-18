@@ -1,25 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
+import type { Service, ServiceStatistics } from '../types/types';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-export interface Service {
-  id?:           string;
-  fecha:         string;
-  tipo_servicio: string;
-  entidad:       string;
-  tipo?:         string;
-  duracion?:     string;
-  ubicacion?:    string;
-  lat?:          number;
-  lng?:          number;
-  estado_final?: string;
-  notas?:        string;
-  created_at?:   string;
-}
-
 
 export const getServices = async (): Promise<Service[]> => {
   const { data, error } = await supabase
@@ -78,7 +63,7 @@ export const deleteService = async (id: string): Promise<void> => {
   if (error) throw error;
 };
 
-export const getStatistics = async () => {
+export const getStatistics = async (): Promise<ServiceStatistics> => {
   const { data: services, error } = await supabase
     .from('services')
     .select('tipo_servicio, estado_final');
@@ -103,3 +88,21 @@ export const getStatistics = async () => {
     byState: Object.entries(byState).map(([key, value]) => ({ label: key, count: value }))
   };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
