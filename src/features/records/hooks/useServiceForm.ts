@@ -6,12 +6,18 @@ interface UseServiceFormProps {
   service: Service | null;
   onClose: () => void;
   initialDate?: string | null;
+  initialServiceType?: string | null; 
 }
 
-export function useServiceForm({ service, onClose, initialDate }: UseServiceFormProps) {
+export function useServiceForm({ 
+  service, 
+  onClose, 
+  initialDate, 
+  initialServiceType 
+}: UseServiceFormProps) {
   const [formData, setFormData] = useState<Partial<Service>>({
-    fecha: initialDate || '',
-    tipo_servicio: '',
+    fecha: initialDate || new Date().toISOString().split('T')[0], 
+    tipo_servicio: initialServiceType || '', 
     entidad: '',
     duracion: '',
     ubicacion: '',
@@ -29,10 +35,15 @@ export function useServiceForm({ service, onClose, initialDate }: UseServiceForm
         ...service,
         fecha: service.fecha.split('T')[0]
       });
-    } else if (initialDate) {
-      setFormData(prev => ({ ...prev, fecha: initialDate }));
+    } else {
+
+      setFormData(prev => ({ 
+        ...prev, 
+        fecha: initialDate || prev.fecha,
+        tipo_servicio: initialServiceType || prev.tipo_servicio
+      }));
     }
-  }, [service, initialDate]);
+  }, [service, initialDate, initialServiceType]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -44,7 +55,7 @@ export function useServiceForm({ service, onClose, initialDate }: UseServiceForm
       setFormData(prev => ({
         ...prev,
         tipo_servicio: value,
-        entidad: '',
+        entidad: '', 
         ubicacion: ''
       }));
       return;

@@ -1,60 +1,89 @@
-import Button from '../../shared/components/Button';
+import { useState } from 'react';
 import Layout from '../../shared/components/Layout';
+import ServiceForm from '../records/ServiceForm';
 
 const Home = () => {
+  const [showForm, setShowForm] = useState(false);
+  const [selectedServiceType, setSelectedServiceType] = useState<string | null>(null);
+
+  const handleCardClick = (serviceType: string) => {
+    setSelectedServiceType(serviceType);
+    setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setSelectedServiceType(null);
+  };
+
+  const services = [
+    { title: "Cita médica", icon: "💪", type: "Cita médica", color: "from-pink-500/20 to-rose-500/5", border: "border-pink-200", text: "text-rose-900", desc: "Seguimiento profesional" },
+    { title: "Fisioterapia", icon: "💆", type: "Fisioterapia", color: "from-amber-500/20 to-orange-500/5", border: "border-amber-200", text: "text-amber-900", desc: "Recupera tu equilibrio" },
+    { title: "Rehabilitación vestibular", icon: "🧠", type: "Rehabilitación vestibular", color: "from-purple-500/20 to-indigo-500/5", border: "border-purple-200", text: "text-purple-900", desc: "Entrena tu centro" },
+    { title: "Actividad física", icon: "💃", type: "Actividad física", color: "from-rose-500/20 to-pink-500/5", border: "border-rose-200", text: "text-rose-900", desc: "Energía en movimiento" }
+  ];
+
   return (
     <Layout 
-      title="Re-Evolución" 
-      subtitle="Tu espacio personal para conectar, sanar y potenciar tu movimiento"
+          title="Tu Re-Evolución" 
+      subtitle="Rehabilita tu cuerpo, evoluciona tu movimiento."
     >
-      <div className="mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-rose-800 mb-2 tracking-tight">
-          Tu camino de recuperación
-        </h2>
-        <div className="w-20 h-0.5 bg-gradient-to-r from-pink-500 to-amber-500 rounded-full"></div>
+      <div className="mb-12 text-center md:text-left">
+        <h2 className="text-4xl md:text-5xl font-black text-rose-900 mb-4 tracking-tight">
+          ¿Qué hacemos hoy?         </h2>
+        <p className="text-rose-700/70 text-lg max-w-2xl mb-6">
+          Registra tu actividad para visualizar tu progreso y sanar de forma consciente.
+        </p>
+        <div className="w-32 h-2 bg-gradient-to-r from-pink-500 to-amber-500 rounded-full mx-auto md:mx-0"></div>
       </div>
 
-      <p className="text-base md:text-lg text-rose-600 mb-6 font-light">
-        Sigue tu progreso y registra cada paso de tu evolución
-      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {services.map((service) => (
+          <button 
+            key={service.type}
+            onClick={() => handleCardClick(service.type)}
+            className={`group relative flex flex-col items-center justify-between p-10 min-h-[320px] rounded-[3rem] border-2 ${service.border} bg-gradient-to-br ${service.color} transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_30px_60px_-15px_rgba(251,113,133,0.3)] active:scale-95`}
+          >
+            <div className="w-24 h-24 bg-white/80 backdrop-blur-sm rounded-3xl flex items-center justify-center shadow-md border border-white transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
+               <span className="text-5xl">{service.icon}</span>
+            </div>
+            
+            <div className="mt-8 text-center">
+              <h3 className={`text-2xl font-black ${service.text} leading-tight mb-2`}>
+                {service.title}
+              </h3>
+              <p className={`text-sm opacity-70 font-medium ${service.text}`}>
+                {service.desc}
+              </p>
+            </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="group relative bg-gradient-to-br from-pink-50 to-rose-50 rounded-lg p-4 border-2 border-pink-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-pink-300 cursor-pointer">
-          <div className="absolute top-0 right-0 w-12 h-12 bg-pink-300/10 rounded-bl-full"></div>
-          <div className="relative flex flex-col items-center gap-2 text-center">
-            <span className="text-2xl transition-transform duration-300 group-hover:scale-110">💪</span>
-            <h3 className="text-sm font-bold text-rose-800 leading-tight">Cita médica</h3>
-          </div>
-        </div>
+            <div className={`mt-6 px-4 py-2 rounded-full bg-white/40 text-xs font-bold uppercase tracking-widest ${service.text} group-hover:bg-white transition-colors`}>
+                Registrar +
+            </div>
+          </button>
+        ))}
+      </div>
 
-        <div className="group relative bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg p-4 border-2 border-amber-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-amber-300 cursor-pointer">
-          <div className="absolute top-0 right-0 w-12 h-12 bg-amber-300/10 rounded-bl-full"></div>
-          <div className="relative flex flex-col items-center gap-2 text-center">
-            <span className="text-2xl transition-transform duration-300 group-hover:scale-110">💆</span>
-            <h3 className="text-sm font-bold text-amber-900 leading-tight">Fisioterapia</h3>
-          </div>
-        </div>
-
-        <div className="group relative bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-4 border-2 border-purple-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-purple-300 cursor-pointer">
-          <div className="absolute top-0 right-0 w-12 h-12 bg-purple-300/10 rounded-bl-full"></div>
-          <div className="relative flex flex-col items-center gap-2 text-center">
-            <span className="text-2xl transition-transform duration-300 group-hover:scale-110">🧠</span>
-            <h3 className="text-sm font-bold text-purple-900 leading-tight">Rehabilitación vestibular</h3>
-          </div>
-        </div>
-
-        <div className="group relative bg-gradient-to-br from-rose-50 to-pink-50 rounded-lg p-4 border-2 border-rose-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-rose-300 cursor-pointer">
-          <div className="absolute top-0 right-0 w-12 h-12 bg-rose-300/10 rounded-bl-full"></div>
-          <div className="relative flex flex-col items-center gap-2 text-center">
-            <span className="text-2xl transition-transform duration-300 group-hover:scale-110">💃</span>
-            <h3 className="text-sm font-bold text-rose-900 leading-tight">Actividad física</h3>
-          </div>
+      <div className="mt-20 text-center">
+        <div className="inline-flex items-center gap-3 p-2 pr-8 rounded-full bg-white shadow-sm border border-rose-100">
+           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-500 text-white animate-pulse">✨</span>
+           <p className="text-rose-900 font-semibold italic">
+             "La evolución es un proceso, no un destino."
+           </p>
         </div>
       </div>
 
-      <div className="mt-10 text-center">
-        <Button withArrow>Iniciar sesión</Button>
-      </div>
+      {showForm && (
+        <div className="fixed inset-0 bg-rose-950/60 backdrop-blur-xl flex items-center justify-center z-[999] p-4">
+          <div className="bg-white rounded-[3.5rem] max-w-lg w-full shadow-2xl animate-in fade-in zoom-in duration-300 max-h-[90vh] overflow-y-auto">
+            <ServiceForm 
+              service={null} 
+              onClose={handleCloseForm} 
+              initialServiceType={selectedServiceType} 
+            />
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };

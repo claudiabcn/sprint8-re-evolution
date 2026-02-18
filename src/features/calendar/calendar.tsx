@@ -112,8 +112,8 @@ export default function Calendar() {
       </div>
 
       {showForm && (
-        <div className="fixed inset-0 bg-rose-900/30 backdrop-blur-sm flex items-center justify-center z-[110] p-4 animate-in fade-in duration-300">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 bg-rose-950/40 backdrop-blur-md flex items-center justify-center z-[999] p-4 md:p-6 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl animate-in zoom-in-95 duration-200 my-auto">
             <ServiceForm 
               service={selectedEvent} 
               onClose={handleCloseForm} 
