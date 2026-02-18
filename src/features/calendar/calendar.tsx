@@ -49,9 +49,7 @@ export default function Calendar() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
             </svg>
           </Button>
-
           <div className="h-6 w-px bg-pink-200 mx-1"></div>
-
           <Button 
             variant="secondary" 
             onClick={() => setCurrentDate(addMonths(currentDate, 1))}
@@ -70,12 +68,10 @@ export default function Calendar() {
             {d}
           </div>
         ))}
-        
-        {days.map(day => {
+          {days.map(day => {
           const dayEvents = events.filter(e => isSameDay(new Date(e.fecha), day));
           const isCurrentMonth = isSameMonth(day, currentDate);
           const isToday = isSameDay(day, new Date());
-
           return (
             <div 
               key={day.toString()} 
@@ -91,7 +87,6 @@ export default function Calendar() {
                   {format(day, 'd')}
                 </span>
               </div>
-
               <div className="flex flex-col gap-1.5">
                 {dayEvents.map(event => (
                   <button
@@ -110,7 +105,6 @@ export default function Calendar() {
           );
         })}
       </div>
-
       {showForm && (
         <div className="fixed inset-0 bg-rose-950/40 backdrop-blur-md flex items-center justify-center z-[999] p-4 md:p-6 overflow-y-auto">
           <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl animate-in zoom-in-95 duration-200 my-auto">
