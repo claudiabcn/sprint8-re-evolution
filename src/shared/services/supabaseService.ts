@@ -85,6 +85,19 @@ export const getStatistics = async (): Promise<ServiceStatistics> => {
   };
 };
 
+export const getServicesWithLocation = async (): Promise<Service[]> => {
+  const { data, error } = await supabase
+    .from('services')
+    .select('*')
+    .not('lat', 'is', null)
+    .not('lng', 'is', null)
+    .order('fecha', { ascending: false });
+
+  if (error) throw error;
+
+  return data || [];
+};
+
 
 
 
