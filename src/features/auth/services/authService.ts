@@ -12,7 +12,6 @@ export interface AuthUser {
 
 export const authService = {
   login: async ({ email, password }: LoginCredentials) => {
-    console.log("Intentando entrar con:", email); // Añade este log para depurar
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
