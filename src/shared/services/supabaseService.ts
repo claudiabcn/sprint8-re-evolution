@@ -1,6 +1,25 @@
-
 import { supabase } from '../../lib/supabase'; 
 import type { Service, ServiceStatistics } from '../types/types';
+
+const mapService = (service: any): Service => ({
+  ...service,
+  notas: service.notas ?? undefined,
+  estado_final: service.estado_final ?? undefined,
+  duracion: service.duracion ?? undefined,
+  ubicacion: service.ubicacion ?? undefined,
+  lat: service.lat ?? undefined,
+  lng: service.lng ?? undefined,
+});
+
+const sanitizeForDB = (service: Partial<Service>) => {
+  const clean = { ...service };
+  Object.keys(clean).forEach(key => {
+    if (clean[key as keyof Service] === undefined) {
+      delete clean[key as keyof Service];
+    }
+  });
+  return clean;
+};
 
 export const getServices = async (): Promise<Service[]> => {
   const { data, error } = await supabase
@@ -9,11 +28,10 @@ export const getServices = async (): Promise<Service[]> => {
     .order('fecha', { ascending: false });
 
   if (error) throw error;
-
-  return data || [];
+  return (data || []).map(mapService);
 };
 
-export const getServiceById = async (id: string): Promise<Service | null> => {
+export const getServiceById = async (id: string): Promise<Service | undefined> => {
   const { data, error } = await supabase
     .from('services')
     .select('*')
@@ -21,33 +39,30 @@ export const getServiceById = async (id: string): Promise<Service | null> => {
     .single();
 
   if (error) throw error;
-
-  return data;
+  return data ? mapService(data) : undefined;
 };
 
 export const createService = async (service: Service): Promise<Service> => {
   const { data, error } = await supabase
     .from('services')
-    .insert([service])
+    .insert([sanitizeForDB(service)]) 
     .select()
     .single();
 
   if (error) throw error;
-
-  return data;
+  return mapService(data);
 };
 
 export const updateService = async (id: string, service: Partial<Service>): Promise<Service> => {
   const { data, error } = await supabase
     .from('services')
-    .update(service)
+    .update(sanitizeForDB(service)) 
     .eq('id', id)
     .select()
     .single();
 
   if (error) throw error;
-
-  return data;
+  return mapService(data);
 };
 
 export const deleteService = async (id: string): Promise<void> => {
@@ -66,15 +81,17 @@ export const getStatistics = async (): Promise<ServiceStatistics> => {
 
   if (error) throw error;
 
-  const byType = services.reduce((acc: any, service) => {
-    acc[service.tipo_servicio] = (acc[service.tipo_servicio] || 0) + 1;
+  const byType = services.reduce((acc: Record<string, number>, service) => {
+    const key = service.tipo_servicio || 'Sin Tipo';
+    acc[key] = (acc[key] || 0) + 1;
     return acc;
   }, {});
 
   const byState = services
-    .filter(s => s.estado_final)
-    .reduce((acc: any, service) => {
-      acc[service.estado_final] = (acc[service.estado_final] || 0) + 1;
+    .filter(s => s.estado_final) 
+    .reduce((acc: Record<string, number>, service) => {
+      const key = service.estado_final || 'Desconocido'; 
+      acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {});
 
@@ -85,20 +102,14 @@ export const getStatistics = async (): Promise<ServiceStatistics> => {
   };
 };
 
+export const getServicesWithLocation = async (): Promise<Service[]> => {
+  const { data, error } = await supabase
+    .from('services')
+    .select('*')
+    .not('lat', 'is', null)
+    .not('lng', 'is', null)
+    .order('fecha', { ascending: false });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  if (error) throw error;
+  return (data || []).map(mapService);
+};

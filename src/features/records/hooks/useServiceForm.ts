@@ -20,13 +20,15 @@ export function useServiceForm({
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [success, setSuccess] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (service) {
       setFormData({
         ...service,
+        notas: service.notas || '',
         fecha: service.fecha.split('T')[0]
       });
     } else {
@@ -41,7 +43,7 @@ export function useServiceForm({
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    setError(null);
+    setError(undefined); 
     const { name, value } = e.target;
 
     if (name === 'tipo_servicio') {
@@ -69,8 +71,8 @@ export function useServiceForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
+    setError(undefined);
+    setSuccess(undefined);
 
     try {
       setLoading(true);

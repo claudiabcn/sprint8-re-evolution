@@ -6,7 +6,7 @@ import { authService } from '../../features/auth/services/authService';
 const navLinks = [
   { path: '/calendar',   label: 'Calendario',   icon: '📅' },
   { path: '/records',    label: 'Registros',    icon: '📋' },
-  { path: '/statistics', label: 'Progreso',     icon: '📈' }, 
+  { path: '/charts', label: 'Progreso',     icon: '📈' }, 
   { path: '/maps',       label: 'Centros',      icon: '📍' },
 ];
 
