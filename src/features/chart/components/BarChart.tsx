@@ -1,43 +1,32 @@
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS, CategoryScale, LinearScale,
+  BarElement, Title, Tooltip, Legend,
+} from 'chart.js';
+import type { StatItem } from '../../../shared/types/types';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface BarChartProps {
-  servicesByType: Record<string, number>;
+  byType: StatItem[];
 }
 
-const BarChart = ({ servicesByType }: BarChartProps) => {
+const BarChart = ({ byType }: BarChartProps) => {
   const data = {
-    labels: Object.keys(servicesByType),
-    datasets: [
-      {
-        label: 'Nº de servicios',
-        data: Object.values(servicesByType),
-        backgroundColor: [
-          'rgba(251, 113, 133, 0.7)',
-          'rgba(253, 186, 116, 0.7)',
-          'rgba(196, 181, 253, 0.7)',
-          'rgba(134, 239, 172, 0.7)',
-        ],
-        borderColor: [
-          '#fb7185',
-          '#fdba74',
-          '#c4b5fd',
-          '#86efac',
-        ],
-        borderWidth: 2,
-        borderRadius: 12,
-      },
-    ],
+    labels: byType.map(i => i.label),
+    datasets: [{
+      label: 'Nº de servicios',
+      data: byType.map(i => i.count),
+      backgroundColor: [
+        'rgba(251, 113, 133, 0.7)',
+        'rgba(253, 186, 116, 0.7)',
+        'rgba(196, 181, 253, 0.7)',
+        'rgba(134, 239, 172, 0.7)',
+      ],
+      borderColor: ['#fb7185', '#fdba74', '#c4b5fd', '#86efac'],
+      borderWidth: 2,
+      borderRadius: 12,
+    }],
   };
 
   const options = {
@@ -52,14 +41,8 @@ const BarChart = ({ servicesByType }: BarChartProps) => {
       },
     },
     scales: {
-      y: {
-        beginAtZero: true,
-        ticks: { stepSize: 1 },
-        grid: { color: 'rgba(251,113,133,0.1)' },
-      },
-      x: {
-        grid: { display: false },
-      },
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(251,113,133,0.1)' } },
+      x: { grid: { display: false } },
     },
   };
 
