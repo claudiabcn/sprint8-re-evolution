@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getServices, deleteService, Service } from '../../shared/services/supabaseService';
+import { getServices, deleteService } from '../../shared/services/supabaseService';
+import type { Service } from '../../shared/types/types';
 import { SERVICE_COLORS } from '../../shared/constants/constants';
 import { formatDate } from '../../shared/utils/dateUtils';
 import NotesPopover from '../records/components/NotesPopover';

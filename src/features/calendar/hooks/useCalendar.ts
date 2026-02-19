@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getServices, Service } from '../../../shared/services/supabaseService';
+import { getServices } from '../../../shared/services/supabaseService';
+import type { Service } from '../../../shared/types/types';
 import { 
   startOfMonth, 
   endOfMonth, 
