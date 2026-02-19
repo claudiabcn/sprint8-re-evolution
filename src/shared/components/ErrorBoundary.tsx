@@ -8,24 +8,26 @@ interface Props {
 
 interface State {
   hasError: boolean;
-  message:  string | null;
+  message: string | undefined;
 }
 
 export default class ErrorBoundary extends Component<Props, State> {
   state: State = {
     hasError: false,
-    message:  null
+    message: undefined 
   };
 
   static getDerivedStateFromError(error: Error): State {
     return {
       hasError: true,
-      message:  error.message || 'Error inesperado'
+
+      message: error.message || 'Error inesperado'
     };
   }
 
   handleReset = () => {
-    this.setState({ hasError: false, message: null });
+
+    this.setState({ hasError: false, message: undefined });
   };
 
   render() {
@@ -50,9 +52,12 @@ export default class ErrorBoundary extends Component<Props, State> {
                 ¡Ups! Algo falló
               </h2>
 
-              <p className="text-rose-600 font-medium mb-8 bg-rose-50/50 py-3 px-4 rounded-xl border border-rose-100 italic">
-                {this.state.message}
-              </p>
+
+              {this.state.message && (
+                <p className="text-rose-600 font-medium mb-8 bg-rose-50/50 py-3 px-4 rounded-xl border border-rose-100 italic">
+                  {this.state.message}
+                </p>
+              )}
 
               <Button 
                 onClick={this.handleReset}

@@ -25,8 +25,8 @@ export interface StatItem {
 }
 
 export interface UseServiceFormProps {
-  service: Service | null;
+  service?: Service;           
   onClose: () => void;
-  initialDate?: string | null;
-  initialServiceType?: string | null;
+  initialDate?: string;        
+  initialServiceType?: string; 
 }

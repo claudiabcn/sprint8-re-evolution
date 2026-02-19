@@ -4,30 +4,28 @@ import { authService } from '../services/authService';
 import { supabase } from '../../../lib/supabase';
 
 interface AuthContextType {
-  user: User | null;
-  session: Session | null;
+  user: User | undefined;
+  session: Session | undefined;
   loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | undefined>(undefined);
+  const [session, setSession] = useState<Session | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
     authService.getSession().then((session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+      setSession(session ?? undefined);
+      setUser(session?.user ?? undefined);
       setLoading(false);
     });
 
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+      setSession(session ?? undefined);
+      setUser(session?.user ?? undefined);
       setLoading(false);
     });
 

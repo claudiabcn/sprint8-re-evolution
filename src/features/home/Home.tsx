@@ -8,7 +8,8 @@ const Home = () => {
   const { session } = useAuth(); 
   const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
-  const [selectedServiceType, setSelectedServiceType] = useState<string | null>(null);
+  
+  const [selectedServiceType, setSelectedServiceType] = useState<string | undefined>(undefined);
 
   const handleCardClick = (serviceType: string) => {
     if (!session) {
@@ -21,14 +22,46 @@ const Home = () => {
 
   const handleCloseForm = () => {
     setShowForm(false);
-    setSelectedServiceType(null);
+    setSelectedServiceType(undefined);
   };
 
   const services = [
-    { title: "Cita médica", icon: "💪", type: "Cita médica", color: "from-pink-500/20 to-rose-500/5", border: "border-pink-200", text: "text-rose-900", desc: "Seguimiento profesional" },
-    { title: "Fisioterapia", icon: "💆", type: "Fisioterapia", color: "from-amber-500/20 to-orange-500/5", border: "border-amber-200", text: "text-amber-900", desc: "Recupera tu equilibrio" },
-    { title: "Rehabilitación vestibular", icon: "🧠", type: "Rehabilitación vestibular", color: "from-purple-500/20 to-indigo-500/5", border: "border-purple-200", text: "text-purple-900", desc: "Entrena tu centro" },
-    { title: "Actividad física", icon: "💃", type: "Actividad física", color: "from-rose-500/20 to-pink-500/5", border: "border-rose-200", text: "text-rose-900", desc: "Energía en movimiento" }
+    { 
+      title: "Cita médica", 
+      icon: "💪", 
+      type: "Cita médica", 
+      color: "from-pink-500/20 to-rose-500/5", 
+      border: "border-pink-200", 
+      text: "text-rose-900", 
+      desc: "Seguimiento profesional" 
+    },
+    { 
+      title: "Fisioterapia", 
+      icon: "💆", 
+      type: "Fisioterapia", 
+      color: "from-amber-500/20 to-orange-500/5", 
+      border: "border-amber-200", 
+      text: "text-amber-900", 
+      desc: "Recupera tu equilibrio" 
+    },
+    { 
+      title: "Rehabilitación vestibular", 
+      icon: "🧠", 
+      type: "Rehabilitación vestibular", 
+      color: "from-purple-500/20 to-indigo-500/5", 
+      border: "border-purple-200", 
+      text: "text-purple-900", 
+      desc: "Entrena tu centro" 
+    },
+    { 
+      title: "Actividad física", 
+      icon: "💃", 
+      type: "Actividad física", 
+      color: "from-rose-500/20 to-pink-500/5", 
+      border: "border-rose-200", 
+      text: "text-rose-900", 
+      desc: "Energía en movimiento" 
+    }
   ];
 
   return (
@@ -73,7 +106,6 @@ const Home = () => {
         ))}
       </div>
 
-
       <div className="mt-20 text-center">
         <div className="inline-flex items-center gap-3 p-2 pr-8 rounded-full bg-white shadow-sm border border-rose-100">
            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-500 text-white animate-pulse">✨</span>
@@ -87,7 +119,7 @@ const Home = () => {
         <div className="fixed inset-0 bg-rose-950/60 backdrop-blur-xl flex items-center justify-center z-[999] p-4">
           <div className="bg-white rounded-[3.5rem] max-w-lg w-full shadow-2xl animate-in fade-in zoom-in duration-300 max-h-[90vh] overflow-y-auto">
             <ServiceForm 
-              service={null} 
+              service={undefined} 
               onClose={handleCloseForm} 
               initialServiceType={selectedServiceType} 
             />

@@ -4,10 +4,10 @@ import Button from '../../shared/components/Button';
 import type { Service } from '../../shared/types/types';
 
 interface Props {
-  service: Service | null;
+  service?: Service;           
   onClose: () => void;
-  initialDate?: string | null;
-  initialServiceType?: string | null;
+  initialDate?: string;        
+  initialServiceType?: string; 
 }
 
 export default function ServiceForm({ service, onClose, initialDate, initialServiceType }: Props) {

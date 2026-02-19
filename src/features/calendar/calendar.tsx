@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { format, isSameDay, isSameMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useCalendar } from './hooks/useCalendar';
@@ -6,39 +6,46 @@ import Layout from '../../shared/components/Layout';
 import ServiceForm from '../records/ServiceForm';
 import { CalendarHeader } from './components/CalendarHeader';
 import { CalendarDay } from './components/CalendarDay';
+import type { Service } from '../../shared/types/types';
 
 export default function Calendar() {
   const { currentDate, setCurrentDate, events, days, refreshEvents } = useCalendar();
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  
+  const [selectedEvent, setSelectedEvent] = useState<Service | undefined>(undefined);
+  const [preselectedDate, setPreselectedDate] = useState<string | undefined>(undefined);
   const [showForm, setShowForm] = useState(false);
-  const [preselectedDate, setPreselectedDate] = useState<string | null>(null);
 
-  const handleEditEvent = (e: React.MouseEvent, event: any) => {
+  const handleEditEvent = useCallback((e: React.MouseEvent, event: Service) => {
     e.stopPropagation();
-    setPreselectedDate(null);
+    setPreselectedDate(undefined); 
     setSelectedEvent(event);
     setShowForm(true);
-  };
+  }, []);
 
-  const handleDayClick = (day: Date) => {
-    setSelectedEvent(null);
+  const handleDayClick = useCallback((day: Date) => {
+    setSelectedEvent(undefined); 
     setPreselectedDate(format(day, 'yyyy-MM-dd')); 
     setShowForm(true);
-  };
+  }, []);
 
-  const handleCloseForm = () => {
+  const handleCloseForm = useCallback(() => {
     setShowForm(false);
-    setSelectedEvent(null);
-    setPreselectedDate(null);
-    refreshEvents();
-  };
+    setSelectedEvent(undefined); 
+    setPreselectedDate(undefined); 
+    refreshEvents(); 
+  }, [refreshEvents]);
 
   return (
     <Layout 
       title="Mi Calendario" 
       subtitle={format(currentDate, 'MMMM yyyy', { locale: es })}
       maxWidth="max-w-7xl"
-      headerContent={<CalendarHeader currentDate={currentDate} setCurrentDate={setCurrentDate} />}
+      headerContent={
+        <CalendarHeader 
+          currentDate={currentDate} 
+          setCurrentDate={setCurrentDate} 
+        />
+      }
     >
       <div className="grid grid-cols-7 gap-px bg-pink-100 border border-pink-100 rounded-xl overflow-hidden shadow-inner">
         {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(d => (
@@ -49,10 +56,10 @@ export default function Calendar() {
         
         {days.map(day => (
           <CalendarDay 
-            key={day.toString()}
+            key={day.toString()} 
             day={day}
-            isCurrentMonth={isSameMonth(day, currentDate)}
             events={events.filter(e => isSameDay(new Date(e.fecha), day))}
+            isCurrentMonth={isSameMonth(day, currentDate)}
             onClick={handleDayClick}
             onEditEvent={handleEditEvent}
           />

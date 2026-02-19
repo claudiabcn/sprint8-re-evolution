@@ -4,12 +4,15 @@ import type { Service } from '../../../shared/types/types';
 
 export const useLocations = () => {
   const [locations, setLocations] = useState<Service[]>([]);
-  const [loading, setLoading]     = useState(true);
-  const [error, setError]         = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  
+  const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const fetchLocations = async () => {
       try {
+        setLoading(true);
+        setError(undefined);
         const data = await getServicesWithLocation();
         setLocations(data);
       } catch (err) {
