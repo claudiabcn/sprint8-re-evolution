@@ -4,6 +4,7 @@ import {
   BarElement, Title, Tooltip, Legend,
 } from 'chart.js';
 import type { StatItem } from '../../../shared/types/types';
+import { CHART_COLORS, BAR_COLORS } from '../../../config/appData';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -17,13 +18,8 @@ const BarChart = ({ byType }: BarChartProps) => {
     datasets: [{
       label: 'Nº de servicios',
       data: byType.map(i => i.count),
-      backgroundColor: [
-        'rgba(251, 113, 133, 0.7)',
-        'rgba(253, 186, 116, 0.7)',
-        'rgba(196, 181, 253, 0.7)',
-        'rgba(134, 239, 172, 0.7)',
-      ],
-      borderColor: ['#fb7185', '#fdba74', '#c4b5fd', '#86efac'],
+      backgroundColor: BAR_COLORS.background,
+      borderColor:     BAR_COLORS.border,
       borderWidth: 2,
       borderRadius: 12,
     }],
@@ -36,12 +32,12 @@ const BarChart = ({ byType }: BarChartProps) => {
       title: {
         display: true,
         text: 'Servicios por tipo',
-        color: '#881337',
+        color: CHART_COLORS.title,
         font: { size: 16, weight: 'bold' as const },
       },
     },
     scales: {
-      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(251,113,133,0.1)' } },
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: CHART_COLORS.grid } },
       x: { grid: { display: false } },
     },
   };

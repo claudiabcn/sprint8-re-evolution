@@ -1,6 +1,7 @@
 import type { Service } from '../../../shared/types/types';
 import { SERVICE_COLORS } from '../../../shared/constants/constants';
 import { formatDate } from '../../../shared/utils/dateUtils';
+import { STATUS_STYLES, STATUS_STYLES_DEFAULT } from '../../../config/appData';
 import NotesPopover from './NotesPopover';
 
 interface Props {
@@ -9,12 +10,7 @@ interface Props {
   onDelete: (id: string) => void;
 }
 
-const STATUS_STYLES: Record<string, string> = {
-  'Bien':          'bg-green-100 text-green-800',
-  'Muy mareada':   'bg-red-100 text-red-800',
-  'Algo mareada':  'bg-yellow-100 text-yellow-800',
-  'Cansada':       'bg-orange-100 text-orange-800',
-};
+const TABLE_HEADERS = ['Fecha', 'Servicio', 'Entidad', 'Duración', 'Estado', 'Acciones'];
 
 export default function ServiceTable({ services, onEdit, onDelete }: Props) {
   return (
@@ -22,7 +18,7 @@ export default function ServiceTable({ services, onEdit, onDelete }: Props) {
       <table className="min-w-full divide-y divide-pink-100">
         <thead className="bg-gradient-to-r from-pink-50 to-rose-50">
           <tr>
-            {['Fecha', 'Servicio', 'Entidad', 'Duración', 'Estado', 'Acciones'].map(header => (
+            {TABLE_HEADERS.map(header => (
               <th key={header} className="px-6 py-4 text-left text-xs font-bold text-rose-700 uppercase tracking-wider">
                 {header}
               </th>
@@ -61,7 +57,7 @@ export default function ServiceTable({ services, onEdit, onDelete }: Props) {
                   {service.duracion || '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${STATUS_STYLES[service.estado_final ?? ''] ?? 'bg-gray-100 text-gray-800'}`}>
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${STATUS_STYLES[service.estado_final ?? ''] ?? STATUS_STYLES_DEFAULT}`}>
                     {service.estado_final || '-'}
                   </span>
                 </td>
@@ -69,7 +65,13 @@ export default function ServiceTable({ services, onEdit, onDelete }: Props) {
                   <div className="flex items-center gap-3">
                     {service.notas && <NotesPopover notes={service.notas} />}
                     <button onClick={() => onEdit(service)} title="Editar" className="transition-transform hover:scale-125">✏️</button>
-                    <button onClick={() => onDelete(service.id)} title="Eliminar" className="transition-transform hover:scale-125">🗑️</button>
+                    <button 
+                    onClick={() => service.id && onDelete(service.id)} 
+                    title="Eliminar" 
+                    className="transition-transform hover:scale-125"
+                  >
+                    🗑️
+                  </button>
                   </div>
                 </td>
               </tr>

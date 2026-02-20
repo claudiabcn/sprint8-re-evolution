@@ -4,6 +4,7 @@ import {
   LineElement, Title, Tooltip, Legend, Filler,
 } from 'chart.js';
 import type { StatItem } from '../../../shared/types/types';
+import { CHART_COLORS } from '../../../config/appData';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
@@ -17,10 +18,10 @@ const LineChart = ({ byState }: LineChartProps) => {
     datasets: [{
       label: 'Servicios por estado',
       data: byState.map(i => i.count),
-      borderColor: '#fb7185',
-      backgroundColor: 'rgba(251, 113, 133, 0.15)',
-      pointBackgroundColor: '#fdba74',
-      pointBorderColor: '#fb7185',
+      borderColor:        CHART_COLORS.primary,
+      backgroundColor:    CHART_COLORS.primaryFill,
+      pointBackgroundColor: CHART_COLORS.point,
+      pointBorderColor:   CHART_COLORS.primary,
       pointBorderWidth: 2,
       pointRadius: 6,
       pointHoverRadius: 8,
@@ -37,12 +38,12 @@ const LineChart = ({ byState }: LineChartProps) => {
       title: {
         display: true,
         text: 'Servicios por estado final',
-        color: '#881337',
+        color: CHART_COLORS.title,
         font: { size: 16, weight: 'bold' as const },
       },
     },
     scales: {
-      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(251,113,133,0.1)' } },
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: CHART_COLORS.grid } },
       x: { grid: { display: false } },
     },
   };
