@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getStatistics } from '../../../shared/services/supabaseService';
+import { getStatistics } from '../../../shared/services/statisticsService';
 import type { ServiceStatistics } from '../../../shared/types/types';
 
 export const useChartData = () => {
