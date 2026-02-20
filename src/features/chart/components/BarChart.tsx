@@ -31,7 +31,7 @@ const BarChart = ({ byType }: BarChartProps) => {
       legend: { display: false },
       title: {
         display: true,
-        text: 'Servicios por tipo',
+        text: '¿Qué he estado haciendo?',
         color: CHART_COLORS.title,
         font: { size: 16, weight: 'bold' as const },
       },

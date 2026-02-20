@@ -16,7 +16,7 @@ const LineChart = ({ byState }: LineChartProps) => {
   const data = {
     labels: byState.map(i => i.label),
     datasets: [{
-      label: 'Servicios por estado',
+      label: 'Estado:',
       data: byState.map(i => i.count),
       borderColor:        CHART_COLORS.primary,
       backgroundColor:    CHART_COLORS.primaryFill,
@@ -37,7 +37,7 @@ const LineChart = ({ byState }: LineChartProps) => {
       legend: { display: false },
       title: {
         display: true,
-        text: 'Servicios por estado final',
+        text: '¿Como me he encontrado?',
         color: CHART_COLORS.title,
         font: { size: 16, weight: 'bold' as const },
       },
