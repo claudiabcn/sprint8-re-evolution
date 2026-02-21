@@ -42,7 +42,7 @@ export default function DurationChart({ dataByMonth }: Props) {
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-3xl border-2 border-pink-100 shadow-lg p-6 lg:col-span-2 h-[450px]">
+    <div className="bg-white/80 backdrop-blur-sm rounded-3xl border-2 border-pink-100 shadow-lg p-6 lg:col-span-2 h-[300px] md:h-[450px]">
       <Bar data={dataByMonth} options={options} />
     </div>
   );
