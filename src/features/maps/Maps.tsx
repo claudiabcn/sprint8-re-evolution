@@ -32,24 +32,28 @@ const Maps = () => {
   if (error)   return <p className="p-4 text-red-500">{error}</p>;
 
   return (
-    <div className="p-6 flex gap-6">
-      <div className="flex-1">
+    <div className="p-4 md:p-6 flex flex-col md:flex-row gap-6">
+      
+      <div className="md:order-2">
+        <MapFilters
+          locations={locations}
+          selectedType={selectedType}
+          selectedEntidad={selectedEntidad}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
+          onTypeChange={setSelectedType}
+          onEntidadChange={setSelectedEntidad}
+          onDateFromChange={setDateFrom}
+          onDateToChange={setDateTo}
+          onReset={handleReset}
+        />
+      </div>
+
+      <div className="flex-1 md:order-1">
         <h1 className="text-4xl font-black text-rose-900 mb-6">Mapa de servicios</h1>
         <MapView locations={filtered} />
       </div>
 
-      <MapFilters
-        locations={locations}
-        selectedType={selectedType}
-        selectedEntidad={selectedEntidad}
-        dateFrom={dateFrom}
-        dateTo={dateTo}
-        onTypeChange={setSelectedType}
-        onEntidadChange={setSelectedEntidad}
-        onDateFromChange={setDateFrom}
-        onDateToChange={setDateTo}
-        onReset={handleReset}
-      />
     </div>
   );
 };
