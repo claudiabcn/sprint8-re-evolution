@@ -7,6 +7,12 @@ export function useLoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  const [loginError, setLoginError] = useState<{ show: boolean; msg: string }>({
+    show: false,
+    msg: ''
+  });
+
   const navigate = useNavigate();
   const { session } = useAuth();
 
@@ -20,11 +26,21 @@ export function useLoginForm() {
     try {
       await authService.login({ email, password });
     } catch (error: any) {
-      alert('Error de acceso: ' + (error.message || 'Credenciales incorrectas'));
+      setLoginError({
+        show: true,
+        msg: error.message || 'Credenciales incorrectas. Por favor, revisa tus datos.'
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  return { email, setEmail, password, setPassword, loading, handleSubmit };
+  const closeError = () => setLoginError({ show: false, msg: '' });
+
+  return { 
+    email, setEmail, 
+    password, setPassword, 
+    loading, handleSubmit,
+    loginError, closeError 
+  };
 }

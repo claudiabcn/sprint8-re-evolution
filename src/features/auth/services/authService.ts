@@ -18,8 +18,7 @@ export const authService = {
     });
     
     if (error) {
-      console.error("Error exacto de Supabase:", error.message);
-      throw error;
+            throw error;
     }
     return data;
   },

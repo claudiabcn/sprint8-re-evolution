@@ -37,7 +37,7 @@ export const SERVICE_CARD_CONFIG: Record<string, {
   },
   'Rehabilitación vestibular': {
     icon:   '🧠',
-    desc:   'Entrena tu centro',
+    desc:   'Entrena tu cerebro',
     color:  'from-purple-500/20 to-indigo-500/5',
     border: 'border-purple-200',
     text:   'text-purple-900',
