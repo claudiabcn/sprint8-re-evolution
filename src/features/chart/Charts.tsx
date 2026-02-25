@@ -1,13 +1,20 @@
 import { useChartData } from './hooks/useChartData';
-import BarChart from './components/BarChart';
 import LineChart from './components/LineChart';
 import DurationChart from './components/DurationChart';
+import DonutChart from './components/DonutChart';
 
 const Charts = () => {
   const { data, loading, error } = useChartData();
 
   if (loading) return <div className="p-10 text-center text-rose-800 animate-pulse">Cargando estadísticas...</div>;
   if (error) return <div className="p-10 text-red-500">{error}</div>;
+
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
@@ -17,12 +24,29 @@ const Charts = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <BarChart byType={data.byType} />
-        <LineChart byState={data.byState} />
+               {data.byMonths && data.byMonths.length > 0 && (
+          <div className="lg:col-span-2">
+            <DonutChart monthsData={data.byMonths} />
+          </div>
+        )}
+
+        <LineChart
+          services={data.services}
+          month={currentMonth}
+          year={currentYear}
+        />
+
+        <LineChart
+          services={data.services}
+          month={previousMonth}
+          year={previousYear}
+        />
 
         {data.byDuration && (
           <DurationChart dataByMonth={data.byDuration} />
         )}
+
+ 
       </div>
     </div>
   );

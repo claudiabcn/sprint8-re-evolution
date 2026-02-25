@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export const navLinks = [
   { path: '/calendar', label: 'Calendario', icon: '📅' },
-  { path: '/records',  label: 'Registros',  icon: '📋' },
+  { path: '/records',  label: 'Actividades',  icon: '📋' },
   { path: '/charts',   label: 'Progreso',   icon: '📈' },
   { path: '/maps',     label: 'Centros',    icon: '📍' },
 ];

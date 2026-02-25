@@ -15,8 +15,8 @@ const TABLE_HEADERS = ['Fecha', 'Servicio', 'Entidad', 'Duración', 'Estado', 'A
 const EmptyState = () => (
   <div className="flex flex-col items-center gap-3 py-16">
     <span className="text-5xl">📋</span>
-    <p className="text-rose-600 font-medium">No hay registros todavía</p>
-    <p className="text-rose-400 text-sm">Crea tu primer registro para empezar</p>
+    <p className="text-rose-600 font-medium">No hay actividades todavía</p>
+    <p className="text-rose-400 text-sm">Añade tu primera actividad</p>
   </div>
 );
 

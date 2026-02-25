@@ -14,23 +14,23 @@ export default function Records() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-rose-50 via-amber-50 to-pink-50 flex items-center justify-center">
-        <div className="text-xl text-rose-700 font-semibold animate-pulse">Cargando registros...</div>
+        <div className="text-xl text-rose-700 font-semibold animate-pulse">Cargando actividades...</div>
       </div>
     );
   }
 
   return (
     <Layout
-      title="Mis Registros"
+      title="Mis Actividades"
       subtitle="Historial completo de tus servicios"
       maxWidth="max-w-7xl"
-      headerContent={<Button onClick={handleNew}>+ Nuevo Registro</Button>}
+      headerContent={<Button onClick={handleNew}>+ Nueva actividad</Button>}
     >
       {error && <ErrorBanner error={error} onClose={() => setError(undefined)} />}
 
       {confirmId && (
         <ConfirmDialog
-          message="¿Estás segura de eliminar este registro?"
+          message="¿Estás segura de eliminar esta actividad?"
           onConfirm={() => handleDelete(confirmId).then(() => setConfirmId(undefined))}
           onCancel={() => setConfirmId(undefined)}
         />

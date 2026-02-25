@@ -31,7 +31,7 @@ export default function ServiceForm({ service, onClose, initialDate, initialServ
       <div className="mb-5">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-rose-500 to-amber-600">
-            {service ? 'Editar Registro' : 'Nuevo Registro'}
+            {service ? 'Editar actividad' : 'Nueva Actividad'}
           </h2>
           <button onClick={onClose} className="text-rose-400 hover:text-rose-600 text-3xl font-bold transition-colors leading-none">×</button>
         </div>
@@ -99,7 +99,7 @@ export default function ServiceForm({ service, onClose, initialDate, initialServ
 
         <div className="flex gap-3 pt-2">
           <Button type="submit" loading={loading} className="flex-1 py-3 text-sm">
-            {service ? 'Actualizar' : 'Crear Registro'}
+            {service ? 'Actualizar' : 'Crear Actividad'}
           </Button>
           <Button type="button" variant="secondary" onClick={onClose} className="flex-1 py-3 text-sm">
             Cancelar

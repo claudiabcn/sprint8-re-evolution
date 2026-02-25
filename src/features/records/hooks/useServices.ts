@@ -16,7 +16,7 @@ export function useServices() {
       const data = await getServices();
       setServices(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al cargar los registros');
+      setError(err instanceof Error ? err.message : 'Error al cargar las actividades');
     } finally {
       setLoading(false);
     }
@@ -28,7 +28,7 @@ export function useServices() {
       await deleteService(id);
       await loadServices();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al eliminar el registro');
+      setError(err instanceof Error ? err.message : 'Error al eliminar la actividad');
     }
   };
 
