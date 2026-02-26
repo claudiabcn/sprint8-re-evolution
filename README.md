@@ -76,17 +76,11 @@ This project is a modern web space created to document my personal evolution. It
    
     The app will be available at `http://localhost:5173`
 
-6.  **Testing:** 
-
-Install Test Dependencies: `npm install -D vitest @testing-library/react @testing-library/jest-dom @testing-library/user-event jsdom`
-
-Run the test: `npm test`
-
 ## 📸 Demo:
 
 https://vercel.com/claudiabcns-projects/sprint8-re-evolution
 
-<img width="1649" height="884" alt="Demo" src="https://github.com/user-attachments/assets/2c8b30d8-8377-43d0-8018-0f659979e6eb" />
+<img width="1235" height="1027" alt="Captura de pantalla 2026-02-26 101702" src="https://github.com/user-attachments/assets/acfb1aef-e518-4107-b004-98b9af91463f" />
 
 
 ## ⭐ Learnings and challenges:
