@@ -13,7 +13,6 @@ interface CalendarDayProps {
 export function CalendarDay({ day, events, isCurrentMonth, onClick, onEditEvent }: CalendarDayProps) {
   const isToday = isSameDay(day, new Date());
 
-  // Manejador para soportar la tecla Enter o Espacio
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -23,11 +22,11 @@ export function CalendarDay({ day, events, isCurrentMonth, onClick, onEditEvent 
 
   return (
     <div 
-      role="button"
-      tabIndex={0}
+      role="button" 
+      tabIndex={0}  
       onClick={() => onClick(day)}
-      onKeyDown={handleKeyDown}
-      aria-label={`Seleccionar día ${format(day, 'd')}`}
+      onKeyDown={handleKeyDown} 
+      aria-label={`Día ${format(day, 'd')}, ${events.length} eventos`}
       className={`bg-white min-h-[130px] p-2 border-t border-l border-pink-50 transition-all duration-300 hover:bg-rose-50/40 cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-pink-400 focus-visible:z-10 ${
         !isCurrentMonth ? 'opacity-30 bg-gray-50/50' : ''
       }`}
@@ -40,12 +39,15 @@ export function CalendarDay({ day, events, isCurrentMonth, onClick, onEditEvent 
         </span>
       </div>
       
-      {/* El contenedor de eventos no debe propagar el click al padre (el día) */}
       <div className="flex flex-col gap-1.5" onClick={(e) => e.stopPropagation()}>
         {events.map(event => (
           <button
             key={event.id}
-            onClick={(e) => onEditEvent(e, event)}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEditEvent(e, event);
+            }}
             className="text-[10px] p-1.5 rounded-lg text-white font-bold truncate hover:scale-105 active:scale-95 transition-all shadow-sm border border-white/20 text-left"
             style={{ 
               backgroundColor: SERVICE_COLORS[event.tipo_servicio as keyof typeof SERVICE_COLORS] 
