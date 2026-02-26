@@ -4,46 +4,61 @@ This project is a modern web space created to document my personal evolution. It
 
 ## 🎯 Objectives:
 
-- Build a
+- Build a React app with navigation and routing across multiple views (Home, Map, Calendar, Charts)
+- Create and consume a real CRUD API connected to a database (Supabase)
+- Integrate interactive tools: Leaflet maps, FullCalendar and Chart.js with real data
+- Implement marker categories with filters on the map
+- Enable event editing from a modal with API synchronization
 
 ## 💻 Technology Stack:
 
 - **React** 
 - **TypeScript** 
 - **Vite** 
-- **Firebase** 
-- **Tailwind CSS** 
+- **Supabase** 
+- **Tailwind CSS**
+- **React Router** 
+- **Leaflet** 
+- **FullCalendar** 
+- **Chart.js**
 
 ## 📋 Files:
 
 ```
-src/
-├── test/ 
-├── features/           
-│   ├── auth/       
-│   └── home/          
-├── shared/            
-│   ├── components/    
-│   ├── ui/            
-│   └── hooks/         
-├── config/            
-│   ├── appData.ts     
-│   ├── firebase.ts    
-│   └── types.ts       
-└── routes/           
+├── src/
+│   ├── assets/
+│   ├── config/
+│   ├── features/
+│   │   ├── auth/
+│   │   ├── calendar/
+│   │   ├── chart/
+│   │   ├── home/
+│   │   ├── maps/
+│   │   └── records/
+│   ├── lib/
+│   ├── routes/
+│   ├── shared/
+│   │   ├── components/
+│   │   ├── constants/
+│   │   ├── services/
+│   │   ├── types/
+│   │   └── utils/
+│   ├── App.tsx
+│   ├── index.css
+│   └── main.tsx        
 ```
 ## 🛠 Installation:
 
 1.  **Clone the Repository:**
 
     ```bash
-    git clone https://github.com/claudiabcn/sprint7-reactInprocode
+    git clone https://github.com/claudiabcn/sprint8-re-evolution
     ```
 
 2.  **Install Dependencies:**
 
     ```bash
-    cd sprint8-reactInprocode
+    cd sprint8-re-evolution
     npm install
     ```
 
@@ -52,17 +67,8 @@ src/
     Create a `.env` file in the root directory:
    
     ```
-    VITE_TMDB_TOKEN=your_tmdb_api_token_here
-    VITE_FIREBASE_API_KEY=your_firebase_api_key
-    VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
-    VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
-    VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
-    VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_sender_id
-    VITE_FIREBASE_APP_ID=your_firebase_app_id
-    ```
-    Get your API keys:
-    ```
-    - Firebase: [https://console.firebase.google.com/](https://console.firebase.google.com/)
+    VITE_SUPABASE_URL
+    VITE_SUPABASE_ANON_KEY
     ```
 
 4. **Run Development Server:**
@@ -78,21 +84,20 @@ Run the test: `npm test`
 
 ## 📸 Demo:
 
-https://sprint8-inprocode.vercel.app/
+https://vercel.com/claudiabcns-projects/sprint8-re-evolution
 
 <img width="1649" height="884" alt="Demo" src="https://github.com/user-attachments/assets/2c8b30d8-8377-43d0-8018-0f659979e6eb" />
 
 
 ## ⭐ Learnings and challenges:
 
-This sprint significantly improved my understanding of 
+This sprint pushed me beyond building features and into thinking about how to structure them. 
+Integrating tools like Supabase, Leaflet, FullCalendar and Chart.js taught me that the real 
+challenge isn't making things work — it's keeping the codebase clean as it grows. I started 
+applying the Single Responsibility Principle across components, hooks and services, learning to 
+ask "should this really live here?" before writing a single line. The biggest shift was 
+architectural: understanding the difference between data access, business logic and UI state, 
+and giving each its own place.
 
-## ⭐ Gherkin testing:
-
-Feature: Auten
-
-    Given el us
-    When int
-    Then es 
 
    
