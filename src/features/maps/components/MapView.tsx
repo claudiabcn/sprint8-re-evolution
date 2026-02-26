@@ -2,7 +2,6 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import MapMarkers from './MapMarkers';
-import type { Service } from '../../../shared/types/types';
 
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -15,11 +14,18 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-const CENTER: [number, number] = [41.3874, 2.1686];
+export interface MapLocation {
+  label: string;
+  address: string;
+  lat: number;
+  lng: number;
+}
 
 interface MapViewProps {
-  locations: Service[];
+  locations: MapLocation[];
 }
+
+const CENTER: [number, number] = [41.4050, 2.1700];
 
 const MapView = ({ locations }: MapViewProps) => {
   return (
