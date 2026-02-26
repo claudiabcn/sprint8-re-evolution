@@ -43,8 +43,8 @@ const DonutChart = ({ monthsData }: any) => {
        Actividades
       </h2>
       <div className="flex flex-col md:flex-row justify-around gap-4">
-        {monthsData.slice(-3).map((m: any, i: number) => (
-          <SingleDonut key={i} {...m} />
+        {monthsData.slice(-3).map((m: any) => (
+          <SingleDonut key={m.month} {...m} />
         ))}
       </div>
     </div>
