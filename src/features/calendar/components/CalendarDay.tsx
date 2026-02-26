@@ -13,10 +13,22 @@ interface CalendarDayProps {
 export function CalendarDay({ day, events, isCurrentMonth, onClick, onEditEvent }: CalendarDayProps) {
   const isToday = isSameDay(day, new Date());
 
+  // Manejador para soportar la tecla Enter o Espacio
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick(day);
+    }
+  };
+
   return (
     <div 
+      role="button"
+      tabIndex={0}
       onClick={() => onClick(day)}
-      className={`bg-white min-h-[130px] p-2 border-t border-l border-pink-50 transition-all duration-300 hover:bg-rose-50/40 cursor-pointer group ${
+      onKeyDown={handleKeyDown}
+      aria-label={`Seleccionar día ${format(day, 'd')}`}
+      className={`bg-white min-h-[130px] p-2 border-t border-l border-pink-50 transition-all duration-300 hover:bg-rose-50/40 cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-pink-400 focus-visible:z-10 ${
         !isCurrentMonth ? 'opacity-30 bg-gray-50/50' : ''
       }`}
     >
@@ -27,7 +39,9 @@ export function CalendarDay({ day, events, isCurrentMonth, onClick, onEditEvent 
           {format(day, 'd')}
         </span>
       </div>
-      <div className="flex flex-col gap-1.5">
+      
+      {/* El contenedor de eventos no debe propagar el click al padre (el día) */}
+      <div className="flex flex-col gap-1.5" onClick={(e) => e.stopPropagation()}>
         {events.map(event => (
           <button
             key={event.id}
