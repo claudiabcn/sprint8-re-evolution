@@ -1,13 +1,13 @@
 import { Scatter } from 'react-chartjs-2';
 import {
   Chart as ChartJS, LinearScale, PointElement,
-  LineElement, Title, Tooltip, Legend, CategoryScale
+  LineElement, LineController, Title, Tooltip, Legend, CategoryScale
 } from 'chart.js';
 import type { Service } from '../../../shared/types/types';
 import { CHART_COLORS } from '../../../config/appData';
 import { FINAL_STATES } from '../../../shared/constants/constants';
 
-ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, LineController, Title, Tooltip, Legend);
 
 interface LineChartProps {
   services: Service[];
